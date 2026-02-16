@@ -84,6 +84,101 @@
         </div>
     </section>
 
+    <!-- Section Dons avec boutons Simuler / Valider -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between mb-4">
+                <div>
+                    <small class="text-teal fw-bold text-uppercase" style="letter-spacing: 2px;">Dispatch automatique</small>
+                    <h2 class="fw-bold text-dark mb-0">Liste des Dons</h2>
+                </div>
+                <a href="<?= $base ?>dons/create" class="btn btn-teal rounded-pill px-3 py-2 d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-plus-lg"></i> Nouveau don
+                </a>
+            </div>
+
+            <?php if (empty($dons)): ?>
+                <div class="glass-card p-5 text-center">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:64px;height:64px;">
+                        <i class="bi bi-box-seam fs-3 text-muted"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Aucun don disponible</h5>
+                    <p class="text-muted mb-0">Ajoutez votre premier don pour commencer le dispatch.</p>
+                </div>
+            <?php else: ?>
+                <div class="glass-card overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr class="text-white" style="background: linear-gradient(135deg, #0d9488, #0f766e);">
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">ID</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Catégorie</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Quantité</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Dispatché</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Reste</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Status</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($dons as $don): ?>
+                                    <?php $pourcentageDon = $don['quantite'] > 0 ? ($don['utilise'] / $don['quantite']) * 100 : 0; ?>
+                                    <tr>
+                                        <td class="px-3 py-3"><span class="fw-bold text-dark">#<?= $don['id'] ?></span></td>
+                                        <td class="px-3 py-3"><span class="badge bg-primary bg-opacity-10 text-primary rounded-pill"><?= htmlspecialchars($don['nom_categorie'] ?? 'N/A') ?></span></td>
+                                        <td class="px-3 py-3 fw-bold"><?= number_format($don['quantite'], 0, ',', ' ') ?></td>
+                                        <td class="px-3 py-3">
+                                            <?= number_format($don['utilise'], 0, ',', ' ') ?>
+                                            <?php if ($don['nb_attributions'] > 0): ?>
+                                                <small class="text-muted d-block">(<?= $don['nb_attributions'] ?> attr.)</small>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-3 py-3">
+                                            <?php if ($don['reste'] > 0): ?>
+                                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill"><?= number_format($don['reste'], 0, ',', ' ') ?></span>
+                                            <?php else: ?>
+                                                <span class="badge bg-light text-secondary rounded-pill">0</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-3 py-3">
+                                            <?php if ($pourcentageDon == 100): ?>
+                                                <span class="badge bg-success bg-opacity-10 text-success badge-status">✓ Complet</span>
+                                            <?php elseif ($pourcentageDon > 0): ?>
+                                                <span class="badge bg-warning bg-opacity-10 text-warning badge-status">⏳ Partiel</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-danger bg-opacity-10 text-danger badge-status">✗ Nouveau</span>
+                                            <?php endif; ?>
+                                            <div class="progress progress-animated mt-1" style="height: 5px; border-radius: 50px;">
+                                                <div class="progress-bar" style="width: <?= $pourcentageDon ?>%"></div>
+                                            </div>
+                                        </td>
+                                        <td class="px-3 py-3">
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <a href="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>" class="btn btn-sm btn-outline-secondary rounded-pill d-inline-flex align-items-center gap-1" title="Détails">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <form action="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>/simuler" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-primary rounded-pill d-inline-flex align-items-center gap-1" title="Simuler le dispatch">
+                                                        <i class="bi bi-lightning"></i> Simuler
+                                                    </button>
+                                                </form>
+                                                <form action="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>/valider" method="POST" class="d-inline" onsubmit="return confirm('⚠️ Êtes-vous sûr de vouloir dispatcher ce don ? Cette action est irréversible.')">
+                                                    <button type="submit" class="btn btn-sm btn-teal rounded-pill d-inline-flex align-items-center gap-1" title="Valider le dispatch">
+                                                        <i class="bi bi-check-circle"></i> Valider
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+
     <!-- Section Villes avec leurs besoins -->
     <section class="py-5">
         <div class="container">

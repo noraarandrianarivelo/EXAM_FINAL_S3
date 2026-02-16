@@ -91,9 +91,24 @@ class DashboardController
             'total_villes' => count($villes)
         ];
         
+        // Récupérer les dons avec infos dispatch
+        $donsData = [];
+        foreach ($allDons as $don) {
+            $attributions = $attributionModel->getByDon($don['id']);
+            $utilise = 0;
+            foreach ($attributions as $attr) {
+                $utilise += $attr['quantite_dispatch'];
+            }
+            $don['utilise'] = $utilise;
+            $don['reste'] = $don['quantite'] - $utilise;
+            $don['nb_attributions'] = count($attributions);
+            $donsData[] = $don;
+        }
+
         $this->app->render('index', [
             'villesData' => $villesData,
-            'stats' => $stats
+            'stats' => $stats,
+            'dons' => $donsData
         ]);
     }
 }

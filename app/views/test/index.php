@@ -109,9 +109,21 @@
                                             <span class="text-muted" style="font-size:.75rem;"><?= date('H:i', strtotime($don['date_saisie'])) ?></span>
                                         </td>
                                         <td class="px-3 py-3">
-                                            <a href="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>" class="btn btn-sm btn-teal rounded-pill d-inline-flex align-items-center gap-1">
-                                                <i class="bi bi-eye"></i> Détails
-                                            </a>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <a href="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>" class="btn btn-sm btn-outline-secondary rounded-pill d-inline-flex align-items-center gap-1" title="Voir les détails">
+                                                    <i class="bi bi-eye"></i> Détails
+                                                </a>
+                                                <form action="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>/simuler" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-primary rounded-pill d-inline-flex align-items-center gap-1" title="Simuler le dispatch">
+                                                        <i class="bi bi-lightning"></i> Simuler
+                                                    </button>
+                                                </form>
+                                                <form action="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>/valider" method="POST" class="d-inline" onsubmit="return confirm('⚠️ Êtes-vous sûr de vouloir dispatcher ce don ? Cette action est irréversible.')">
+                                                    <button type="submit" class="btn btn-sm btn-teal rounded-pill d-inline-flex align-items-center gap-1" title="Valider le dispatch">
+                                                        <i class="bi bi-check-circle"></i> Valider
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
