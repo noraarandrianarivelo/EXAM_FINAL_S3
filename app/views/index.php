@@ -83,6 +83,8 @@
                 <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dispatch</a>
                 <a href="<?= Flight::get('flight.base_url') ?>achats/besoins-achetables" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Achats</a>
                 <a href="<?= Flight::get('flight.base_url') ?>achats" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Liste Achats</a>
+                <a href="<?= Flight::get('flight.base_url') ?>besoins" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Besoins</a>
+                <a href="<?= Flight::get('flight.base_url') ?>villes" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Villes</a>
             </div>
 
             <!-- CTA -->
@@ -109,6 +111,8 @@
             <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="block text-sm font-medium text-gray-600">Dispatch</a>
             <a href="<?= Flight::get('flight.base_url') ?>achats/besoins-achetables" class="block text-sm font-medium text-gray-600">Achats</a>
             <a href="<?= Flight::get('flight.base_url') ?>achats" class="block text-sm font-medium text-gray-600">Liste Achats</a>
+            <a href="<?= Flight::get('flight.base_url') ?>besoins" class="block text-sm font-medium text-gray-600">Besoins</a>
+            <a href="<?= Flight::get('flight.base_url') ?>villes" class="block text-sm font-medium text-gray-600">Villes</a>
             <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl mt-4">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
