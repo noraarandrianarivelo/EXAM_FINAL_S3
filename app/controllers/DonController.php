@@ -35,20 +35,18 @@ class DonController
         $db = $this->app->db();
         
         // Récupérer les données du formulaire
-        $pu = $_POST['pu'] ?? 0;
         $quantite = $_POST['quantite'] ?? 0;
         $id_categorie_besoin = $_POST['id_categorie_besoin'] ?? 0;
         $date_saisie = $_POST['date_saisie'] ?? date('Y-m-d H:i:s');
 
         // Validation basique
-        if (!$pu || !$quantite || !$id_categorie_besoin) {
+        if (!$quantite || !$id_categorie_besoin) {
             $this->app->redirect($this->app->get('flight.base_url') . 'dons/create?error=1');
             return;
         }
 
         // Créer le don
         $donModel = new DonModel($db);
-        $donModel->setPu($pu);
         $donModel->setQuantite($quantite);
         $donModel->setIdCategorieBesoin($id_categorie_besoin);
         $donModel->setDateSaisie($date_saisie);

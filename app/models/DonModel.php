@@ -8,7 +8,6 @@ use PDOException;
 class DonModel
 {
     private $id;
-    private $pu;
     private $quantite;
     private $id_categorie_besoin;
     private $date_saisie;
@@ -31,16 +30,6 @@ class DonModel
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    public function getPu()
-    {
-        return $this->pu;
-    }
-
-    public function setPu($pu)
-    {
-        $this->pu = $pu;
     }
 
     public function getQuantite()
@@ -87,11 +76,10 @@ class DonModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO bngrc_don (pu, quantite, id_categorie_besoin, date_saisie) VALUES (?, ?, ?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_don (quantite, id_categorie_besoin, date_saisie) VALUES (?, ?, ?)');
 
         try {
             $STH->execute([
-                $this->getPu(),
                 $this->getQuantite(),
                 $this->getIdCategorieBesoin(),
                 $this->getDateSaisie()
@@ -105,11 +93,10 @@ class DonModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE bngrc_don SET pu = ?, quantite = ?, id_categorie_besoin = ?, date_saisie = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_don SET quantite = ?, id_categorie_besoin = ?, date_saisie = ? WHERE id = ?');
 
         try {
             $STH->execute([
-                $this->getPu(),
                 $this->getQuantite(),
                 $this->getIdCategorieBesoin(),
                 $this->getDateSaisie(),
@@ -139,6 +126,7 @@ class DonModel
         $DBH = $this->db;
         $STH = $DBH->query('SELECT d.*, 
                             cb.nom as nom_categorie,
+                            cb.pu as pu,
                             tb.nom as nom_type_besoin
                             FROM bngrc_don d
                             INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
@@ -159,6 +147,7 @@ class DonModel
         $DBH = $this->db;
         $STH = $DBH->prepare('SELECT d.*, 
                               cb.nom as nom_categorie,
+                              cb.pu as pu,
                               tb.nom as nom_type_besoin
                               FROM bngrc_don d
                               INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
@@ -203,7 +192,7 @@ class DonModel
             $sql .= ' AND d.id_categorie_besoin = ?';
         }
         
-        $sql .= ' GROUP BY d.id, d.pu, d.quantite, d.id_categorie_besoin, d.date_saisie, d.created_at, cb.nom
+        $sql .= ' GROUP BY d.id, d.quantite, d.id_categorie_besoin, d.date_saisie, d.created_at, cb.nom
                   HAVING quantite_disponible > 0
                   ORDER BY d.date_saisie';
 

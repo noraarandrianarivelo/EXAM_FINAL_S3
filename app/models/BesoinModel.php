@@ -8,7 +8,6 @@ use PDOException;
 class BesoinModel
 {
     private $id;
-    private $pu;
     private $quantite;
     private $id_categorie_besoin;
     private $id_ville;
@@ -32,16 +31,6 @@ class BesoinModel
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    public function getPu()
-    {
-        return $this->pu;
-    }
-
-    public function setPu($pu)
-    {
-        $this->pu = $pu;
     }
 
     public function getQuantite()
@@ -98,11 +87,10 @@ class BesoinModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO bngrc_besoin (pu, quantite, id_categorie_besoin, id_ville, date_besoin) VALUES (?, ?, ?, ?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_besoin (quantite, id_categorie_besoin, id_ville, date_besoin) VALUES (?, ?, ?, ?)');
 
         try {
             $STH->execute([
-                $this->getPu(),
                 $this->getQuantite(),
                 $this->getIdCategorieBesoin(),
                 $this->getIdVille(),
@@ -117,11 +105,10 @@ class BesoinModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE bngrc_besoin SET pu = ?, quantite = ?, id_categorie_besoin = ?, id_ville = ?, date_besoin = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_besoin SET quantite = ?, id_categorie_besoin = ?, id_ville = ?, date_besoin = ? WHERE id = ?');
 
         try {
             $STH->execute([
-                $this->getPu(),
                 $this->getQuantite(),
                 $this->getIdCategorieBesoin(),
                 $this->getIdVille(),
@@ -242,7 +229,7 @@ class BesoinModel
                               INNER JOIN bngrc_region r ON v.id_region = r.id
                               LEFT JOIN bngrc_attribution a ON b.id = a.id_besoin
                               WHERE b.id_categorie_besoin = ?
-                              GROUP BY b.id, b.pu, b.quantite, b.id_categorie_besoin, b.id_ville, b.date_besoin, b.created_at, v.nom, r.nom
+                              GROUP BY b.id, b.quantite, b.id_categorie_besoin, b.id_ville, b.date_besoin, b.created_at, v.nom, r.nom
                               HAVING reste > 0
                               ORDER BY b.date_besoin ASC');
         $STH->execute([$id_categorie_besoin]);

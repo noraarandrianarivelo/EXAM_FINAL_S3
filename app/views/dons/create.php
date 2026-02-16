@@ -127,16 +127,6 @@
                                class="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-4 focus:ring-teal-500/20 transition-all outline-none">
                     </div>
 
-                    <!-- Prix Unitaire -->
-                    <div>
-                        <label for="pu" class="block text-sm font-semibold text-gray-900 mb-2">
-                            Prix Unitaire (Ar) <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" name="pu" id="pu" min="0" step="0.01" required 
-                               placeholder="Ex: 3000"
-                               class="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-4 focus:ring-teal-500/20 transition-all outline-none">
-                    </div>
-
                     <!-- Date de saisie -->
                     <div>
                         <label for="date_saisie" class="block text-sm font-semibold text-gray-900 mb-2">
