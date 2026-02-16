@@ -1,0 +1,6 @@
+CREATE TABLE bngrc_configuration (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cle VARCHAR(100) NOT NULL,
+    valeur VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
