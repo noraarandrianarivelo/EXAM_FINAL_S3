@@ -63,7 +63,7 @@
     <nav class="glass-nav fixed top-0 left-0 right-0 z-50 h-20">
         <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
             <!-- Logo -->
-            <a href="/" class="flex items-center gap-3 group">
+            <a href="<?= Flight::get('flight.base_url') ?>" class="flex items-center gap-3 group">
                 <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/50 transition-all duration-300">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
@@ -77,14 +77,14 @@
 
             <!-- Menu Principal -->
             <div class="hidden md:flex items-center gap-8">
-                <a href="/" class="text-sm font-semibold text-teal-700 border-b-2 border-teal-500 pb-1">Tableau de bord</a>
-                <a href="/dons/create" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Nouveau Don</a>
-                <a href="/test/dispatch" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dispatch</a>
+                <a href="<?= Flight::get('flight.base_url') ?>" class="text-sm font-semibold text-teal-700 border-b-2 border-teal-500 pb-1">Tableau de bord</a>
+                <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Nouveau Don</a>
+                <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dispatch</a>
             </div>
 
             <!-- CTA -->
             <div class="flex items-center gap-4">
-                <a href="/dons/create" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -101,10 +101,10 @@
 
         <!-- Mobile Menu -->
         <div class="md:hidden hidden bg-white border-t border-gray-100 py-4 px-6 space-y-3" id="mobile-menu">
-            <a href="/" class="block text-sm font-semibold text-teal-700">Tableau de bord</a>
-            <a href="/dons/create" class="block text-sm font-medium text-gray-600">Nouveau Don</a>
-            <a href="/test/dispatch" class="block text-sm font-medium text-gray-600">Dispatch</a>
-            <a href="/dons/create" class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl mt-4">
+            <a href="<?= Flight::get('flight.base_url') ?>" class="block text-sm font-semibold text-teal-700">Tableau de bord</a>
+            <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="block text-sm font-medium text-gray-600">Nouveau Don</a>
+            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="block text-sm font-medium text-gray-600">Dispatch</a>
+            <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl mt-4">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -214,7 +214,7 @@
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Villes et besoins</h2>
                 </div>
                 <div class="mt-4 md:mt-0 flex items-center gap-3">
-                    <a href="/test/dispatch" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors group">
+                    <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors group">
                         Gérer les dons
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>

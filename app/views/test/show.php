@@ -1,272 +1,240 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Dispatch - Don #<?= $don['id'] ?></title>
+    <title>BNGRC - Don #<?= $don['id'] ?></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            padding: 30px;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #667eea;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        .card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        .info-item {
-            display: flex;
-            flex-direction: column;
-        }
-        .info-label {
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .info-value {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #333;
-        }
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-        }
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .badge-warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background: #667eea;
+        ::selection {
+            background: #0d9488;
             color: white;
-            font-weight: 600;
-            font-size: 0.9em;
         }
-        tr:hover {
-            background: #f5f5f5;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s;
-            font-size: 1em;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
-        }
-        .btn-container {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border-left: 4px solid #ffc107;
-        }
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border-left: 4px solid #17a2b8;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <a href="/test/dispatch" class="back-link">← Retour à la liste des dons</a>
-        
-        <h1>État du Don #<?= $don['id'] ?> avant dispatch</h1>
+<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+    <section class="py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Back Link -->
+            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium mb-6 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Retour à la liste des dons
+            </a>
 
-        <div class="card">
-            <h2>📦 Informations du Don</h2>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">Catégorie</span>
-                    <span class="info-value"><?= htmlspecialchars($don['nom_categorie']) ?></span>
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 border border-teal-200 rounded-full text-teal-700 text-xs font-semibold uppercase tracking-wider mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    Pré-dispatch
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Type</span>
-                    <span class="info-value"><?= htmlspecialchars($don['nom_type_besoin']) ?></span>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3">
+                    Don #<span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500"><?= $don['id'] ?></span>
+                </h1>
+                <p class="text-lg text-gray-600">
+                    État du don avant dispatch automatique
+                </p>
+            </div>
+
+            <!-- Don Information Card -->
+            <div class="glass-card rounded-2xl p-8 shadow-xl mb-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Informations du Don</h2>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Quantité totale</span>
-                    <span class="info-value"><?= number_format($don['quantite'], 0, ',', ' ') ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Prix unitaire</span>
-                    <span class="info-value"><?= number_format($don['pu'], 0, ',', ' ') ?> Ar</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Déjà attribué</span>
-                    <span class="info-value"><?= number_format($utilise, 0, ',', ' ') ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Reste disponible</span>
-                    <span class="info-value">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <span class="block text-sm text-gray-600 mb-1">Catégorie</span>
+                        <span class="block text-xl font-semibold text-gray-900"><?= htmlspecialchars($don['nom_categorie']) ?></span>
+                    </div>
+                    <div>
+                        <span class="block text-sm text-gray-600 mb-1">Type</span>
+                        <span class="block text-xl font-semibold text-gray-900"><?= htmlspecialchars($don['nom_type_besoin']) ?></span>
+                    </div>
+                    <div>
+                        <span class="block text-sm text-gray-600 mb-1">Quantité totale</span>
+                        <span class="block text-xl font-semibold text-gray-900"><?= number_format($don['quantite'], 0, ',', ' ') ?></span>
+                    </div>
+                    <div>
+                        <span class="block text-sm text-gray-600 mb-1">Prix unitaire</span>
+                        <span class="block text-xl font-semibold text-gray-900"><?= number_format($don['pu'], 0, ',', ' ') ?> Ar</span>
+                    </div>
+                    <div>
+                        <span class="block text-sm text-gray-600 mb-1">Déjà attribué</span>
+                        <span class="block text-xl font-semibold text-gray-900"><?= number_format($utilise, 0, ',', ' ') ?></span>
+                    </div>
+                    <div>
+                        <span class="block text-sm text-gray-600 mb-1">Reste disponible</span>
                         <?php if ($reste > 0): ?>
-                            <span class="badge badge-success"><?= number_format($reste, 0, ',', ' ') ?></span>
+                            <span class="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-800 rounded-full text-lg font-semibold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <?= number_format($reste, 0, ',', ' ') ?>
+                            </span>
                         <?php elseif ($reste == 0): ?>
-                            <span class="badge badge-warning">0</span>
+                            <span class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-lg font-semibold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                0
+                            </span>
                         <?php endif; ?>
-                    </span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <?php if ($reste <= 0): ?>
-            <div class="alert alert-warning">
-                ⚠️ Ce don a déjà été entièrement dispatché. Aucune quantité disponible pour un nouveau dispatch.
-            </div>
-        <?php endif; ?>
-
-        <div class="card">
-            <h2>🎯 Besoins Ouverts pour "<?= htmlspecialchars($don['nom_categorie']) ?>"</h2>
-            <?php if (empty($besoins)): ?>
-                <div class="alert alert-info">
-                    ℹ️ Aucun besoin ouvert pour cette catégorie. Tous les besoins ont été satisfaits.
+            <?php if ($reste <= 0): ?>
+                <div class="glass-card rounded-xl p-5 mb-6 border-l-4 border-yellow-500 bg-yellow-50/80">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-yellow-900 mb-1">Attention</h3>
+                            <p class="text-sm text-yellow-800">
+                                Ce don a déjà été entièrement dispatché. Aucune quantité disponible pour un nouveau dispatch.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            <?php else: ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Ville</th>
-                            <th>Région</th>
-                            <th>Quantité totale</th>
-                            <th>Reste à satisfaire</th>
-                            <th>Date besoin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($besoins as $besoin): ?>
-                            <tr>
-                                <td><strong>#<?= $besoin['id'] ?></strong></td>
-                                <td><?= htmlspecialchars($besoin['nom_ville']) ?></td>
-                                <td><?= htmlspecialchars($besoin['nom_region']) ?></td>
-                                <td><?= number_format($besoin['quantite'], 0, ',', ' ') ?></td>
-                                <td>
-                                    <span class="badge badge-warning">
-                                        <?= number_format($besoin['reste'], 0, ',', ' ') ?>
-                                    </span>
-                                </td>
-                                <td><?= date('d/m/Y H:i', strtotime($besoin['date_besoin'])) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            <?php endif; ?>
+
+            <!-- Open Needs -->
+            <div class="glass-card rounded-2xl p-8 shadow-xl mb-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Besoins Ouverts pour "<?= htmlspecialchars($don['nom_categorie']) ?>"</h2>
+                </div>
+                
+                <?php if (empty($besoins)): ?>
+                    <div class="glass-card rounded-xl p-5 border-l-4 border-blue-500 bg-blue-50/80">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-sm text-blue-800">
+                                Aucun besoin ouvert pour cette catégorie. Tous les besoins ont été satisfaits.
+                            </p>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b-2 border-teal-200 bg-gradient-to-r from-teal-600 to-teal-700">
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">ID</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Ville</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Région</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Quantité totale</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Reste à satisfaire</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Date besoin</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <?php foreach ($besoins as $besoin): ?>
+                                    <tr class="hover:bg-teal-50/50 transition-colors">
+                                        <td class="py-4 px-6 font-bold text-gray-900">#<?= $besoin['id'] ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($besoin['nom_ville']) ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($besoin['nom_region']) ?></td>
+                                        <td class="py-4 px-6 text-gray-900 font-medium"><?= number_format($besoin['quantite'], 0, ',', ' ') ?></td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                                                <?= number_format($besoin['reste'], 0, ',', ' ') ?>
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-gray-700"><?= date('d/m/Y H:i', strtotime($besoin['date_besoin'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Existing Attributions -->
+            <?php if (!empty($attributions)): ?>
+                <div class="glass-card rounded-2xl p-8 shadow-xl mb-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Attributions Existantes</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b-2 border-purple-200 bg-gradient-to-r from-purple-600 to-purple-700">
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">ID</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Besoin</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Ville</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Quantité</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Date dispatch</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <?php foreach ($attributions as $attr): ?>
+                                    <tr class="hover:bg-purple-50/50 transition-colors">
+                                        <td class="py-4 px-6 font-bold text-gray-900">#<?= $attr['id'] ?></td>
+                                        <td class="py-4 px-6 text-gray-700">Besoin #<?= $attr['id_besoin'] ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($attr['nom_ville']) ?></td>
+                                        <td class="py-4 px-6 text-gray-900 font-medium"><?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= date('d/m/Y H:i', strtotime($attr['date_dispatch'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Dispatch Button -->
+            <?php if ($reste > 0 && !empty($besoins)): ?>
+                <div class="flex justify-center mt-8">
+                    <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>">
+                        <button type="submit" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Exécuter le dispatch automatique
+                        </button>
+                    </form>
+                </div>
             <?php endif; ?>
         </div>
-
-        <?php if (!empty($attributions)): ?>
-            <div class="card">
-                <h2>📋 Attributions Existantes</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Besoin</th>
-                            <th>Ville</th>
-                            <th>Quantité</th>
-                            <th>Date dispatch</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($attributions as $attr): ?>
-                            <tr>
-                                <td>#<?= $attr['id'] ?></td>
-                                <td>Besoin #<?= $attr['id_besoin'] ?></td>
-                                <td><?= htmlspecialchars($attr['nom_ville']) ?></td>
-                                <td><?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?></td>
-                                <td><?= date('d/m/Y H:i', strtotime($attr['date_dispatch'])) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($reste > 0 && !empty($besoins)): ?>
-            <div class="btn-container">
-                <form method="POST" action="/test/dispatch/don/<?= $don['id'] ?>">
-                    <button type="submit" class="btn">
-                        🚀 Exécuter le dispatch automatique
-                    </button>
-                </form>
-            </div>
-        <?php endif; ?>
-    </div>
+    </section>
 </body>
 </html>

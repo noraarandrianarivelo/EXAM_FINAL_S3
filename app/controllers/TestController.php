@@ -56,7 +56,7 @@ class TestController
         $don = $donModel->getById($id);
         
         if (!$don) {
-            $this->app->redirect('/test/dispatch');
+            $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
             return;
         }
 
@@ -94,7 +94,7 @@ class TestController
         $don = $donModel->getById($id);
         
         if (!$don) {
-            $this->app->redirect('/test/dispatch');
+            $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
             return;
         }
 

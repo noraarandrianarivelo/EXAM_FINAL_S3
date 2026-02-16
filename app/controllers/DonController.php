@@ -42,7 +42,7 @@ class DonController
 
         // Validation basique
         if (!$pu || !$quantite || !$id_categorie_besoin) {
-            $this->app->redirect('/dons/create?error=1');
+            $this->app->redirect($this->app->get('flight.base_url') . 'dons/create?error=1');
             return;
         }
 
@@ -61,9 +61,9 @@ class DonController
             $resultatDispatch = $attributionService->dispatcherNouvelleArrivage($idDon);
 
             // Rediriger vers la page de résultat du dispatch
-            $this->app->redirect('/dons/' . $idDon . '/dispatch-result');
+            $this->app->redirect($this->app->get('flight.base_url') . 'dons/' . $idDon . '/dispatch-result');
         } catch (\Exception $e) {
-            $this->app->redirect('/dons/create?error=2&message=' . urlencode($e->getMessage()));
+            $this->app->redirect($this->app->get('flight.base_url') . 'dons/create?error=2&message=' . urlencode($e->getMessage()));
         }
     }
 
@@ -77,7 +77,7 @@ class DonController
         $don = $donModel->getById($id);
 
         if (!$don) {
-            $this->app->redirect('/test/dispatch');
+            $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
             return;
         }
 

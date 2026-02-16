@@ -1,281 +1,246 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultat du Dispatch Automatique - Don #<?= $don['id'] ?></title>
+    <title>BNGRC - Résultat Dispatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            padding: 30px;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .alert {
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-size: 1.1em;
-        }
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 5px solid #28a745;
-        }
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border-left: 5px solid #ffc107;
-        }
-        .card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .stat-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 8px;
-        }
-        .stat-value {
-            font-size: 2em;
-            font-weight: 700;
-            color: #667eea;
-        }
-        .stat-value.success {
-            color: #28a745;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background: #667eea;
+        ::selection {
+            background: #0d9488;
             color: white;
-            font-weight: 600;
         }
-        tr:hover {
-            background: #f5f5f5;
-        }
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .badge-warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-        .btn-success {
-            background: #28a745;
-        }
-        .btn-success:hover {
-            background: #218838;
-        }
-        .actions {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>✅ Don Ajouté et Dispatché Automatiquement</h1>
+<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+    <section class="py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full text-green-700 text-xs font-semibold uppercase tracking-wider mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Dispatch Automatique
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3">
+                    Don Ajouté et <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Dispatché</span>
+                </h1>
+            </div>
 
-        <?php if ($nbAttributions > 0): ?>
-            <div class="alert alert-success">
-                <strong>✅ Succès !</strong> Le don a été ajouté et dispatché automatiquement. 
-                <strong><?= $nbAttributions ?></strong> attribution(s) créée(s).
-            </div>
-        <?php else: ?>
-            <div class="alert alert-warning">
-                <strong>⚠️ Don ajouté</strong> Le don a été enregistré mais aucun besoin ouvert ne correspond à cette catégorie.
-                Le don reste disponible pour un dispatch ultérieur.
-            </div>
-        <?php endif; ?>
+            <!-- Alert -->
+            <?php if ($nbAttributions > 0): ?>
+                <div class="glass-card rounded-xl p-5 mb-8 border-l-4 border-green-500 bg-green-50/80">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-green-900 mb-1 text-lg">Succès !</h3>
+                            <p class="text-green-800">
+                                Le don a été ajouté et dispatché automatiquement. <strong><?= $nbAttributions ?></strong> attribution(s) créée(s).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="glass-card rounded-xl p-5 mb-8 border-l-4 border-yellow-500 bg-yellow-50/80">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-yellow-900 mb-1 text-lg">Don ajouté</h3>
+                            <p class="text-yellow-800">
+                                Le don a été enregistré mais aucun besoin ouvert ne correspond à cette catégorie. Le don reste disponible pour un dispatch ultérieur.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
 
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-label">Don #</div>
-                <div class="stat-value"><?= $don['id'] ?></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Quantité totale</div>
-                <div class="stat-value"><?= number_format($don['quantite'], 0, ',', ' ') ?></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Quantité dispatchée</div>
-                <div class="stat-value success"><?= number_format($utilise, 0, ',', ' ') ?></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Reste disponible</div>
-                <div class="stat-value <?= $reste > 0 ? 'success' : '' ?>">
-                    <?= number_format($reste, 0, ',', ' ') ?>
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Don #</div>
+                    <div class="text-4xl font-bold text-gray-900"><?= $don['id'] ?></div>
+                </div>
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Quantité totale</div>
+                    <div class="text-4xl font-bold text-gray-900"><?= number_format($don['quantite'], 0, ',', ' ') ?></div>
+                </div>
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Quantité dispatchée</div>
+                    <div class="text-4xl font-bold text-green-600"><?= number_format($utilise, 0, ',', ' ') ?></div>
+                </div>
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Reste disponible</div>
+                    <div class="text-4xl font-bold <?= $reste > 0 ? 'text-green-600' : 'text-gray-900' ?>">
+                        <?= number_format($reste, 0, ',', ' ') ?>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card">
-            <h2>📦 Informations du Don</h2>
-            <table>
-                <tr>
-                    <th>Catégorie</th>
-                    <td><?= htmlspecialchars($don['nom_categorie']) ?></td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td><?= htmlspecialchars($don['nom_type_besoin']) ?></td>
-                </tr>
-                <tr>
-                    <th>Prix unitaire</th>
-                    <td><?= number_format($don['pu'], 0, ',', ' ') ?> Ar</td>
-                </tr>
-                <tr>
-                    <th>Date de saisie</th>
-                    <td><?= date('d/m/Y H:i', strtotime($don['date_saisie'])) ?></td>
-                </tr>
-            </table>
-        </div>
-
-        <?php if (!empty($attributions)): ?>
-            <div class="card">
-                <h2>✅ Attributions Créées (<?= count($attributions) ?>)</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Attribution</th>
-                            <th>Besoin</th>
-                            <th>Ville</th>
-                            <th>Quantité dispatchée</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($attributions as $attr): ?>
-                            <tr>
-                                <td><strong>#<?= $attr['id'] ?></strong></td>
-                                <td>Besoin #<?= $attr['id_besoin'] ?></td>
-                                <td><?= htmlspecialchars($attr['nom_ville']) ?></td>
-                                <td>
-                                    <span class="badge badge-success">
-                                        <?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?>
-                                    </span>
-                                </td>
-                                <td><?= date('d/m/Y H:i', strtotime($attr['date_dispatch'])) ?></td>
+            <!-- Don Information -->
+            <div class="glass-card rounded-2xl p-8 shadow-xl mb-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Informations du Don</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-teal-50/30">
+                                <th class="py-4 px-6 text-left font-semibold text-gray-900 bg-teal-50/50">Catégorie</th>
+                                <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($don['nom_categorie']) ?></td>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!empty($besoinsOuverts)): ?>
-            <div class="card">
-                <h2>⏳ Besoins Ouverts Restants (<?= count($besoinsOuverts) ?>)</h2>
-                <p style="color: #666; margin-bottom: 15px;">
-                    Ces besoins n'ont pas pu être satisfaits car la quantité du don était insuffisante.
-                </p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Besoin</th>
-                            <th>Ville</th>
-                            <th>Région</th>
-                            <th>Reste à satisfaire</th>
-                            <th>Date besoin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($besoinsOuverts as $besoin): ?>
-                            <tr>
-                                <td><strong>#<?= $besoin['id'] ?></strong></td>
-                                <td><?= htmlspecialchars($besoin['nom_ville']) ?></td>
-                                <td><?= htmlspecialchars($besoin['nom_region']) ?></td>
-                                <td>
-                                    <span class="badge badge-warning">
-                                        <?= number_format($besoin['reste'], 0, ',', ' ') ?>
-                                    </span>
-                                </td>
-                                <td><?= date('d/m/Y H:i', strtotime($besoin['date_besoin'])) ?></td>
+                            <tr class="hover:bg-teal-50/30">
+                                <th class="py-4 px-6 text-left font-semibold text-gray-900 bg-teal-50/50">Type</th>
+                                <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($don['nom_type_besoin']) ?></td>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                            <tr class="hover:bg-teal-50/30">
+                                <th class="py-4 px-6 text-left font-semibold text-gray-900 bg-teal-50/50">Prix unitaire</th>
+                                <td class="py-4 px-6 text-gray-700"><?= number_format($don['pu'], 0, ',', ' ') ?> Ar</td>
+                            </tr>
+                            <tr class="hover:bg-teal-50/30">
+                                <th class="py-4 px-6 text-left font-semibold text-gray-900 bg-teal-50/50">Date de saisie</th>
+                                <td class="py-4 px-6 text-gray-700"><?= date('d/m/Y H:i', strtotime($don['date_saisie'])) ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        <?php endif; ?>
 
-        <div class="actions">
-            <a href="/dons/create" class="btn btn-success">➕ Ajouter un autre don</a>
-            <a href="/test/dispatch" class="btn">📋 Voir tous les dons</a>
+            <!-- Attributions Created -->
+            <?php if (!empty($attributions)): ?>
+                <div class="glass-card rounded-2xl p-8 shadow-xl mb-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Attributions Créées (<?= count($attributions) ?>)</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b-2 border-green-200 bg-gradient-to-r from-green-500 to-green-600">
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Attribution</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Besoin</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Ville</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Quantité dispatchée</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <?php foreach ($attributions as $attr): ?>
+                                    <tr class="hover:bg-green-50/50 transition-colors">
+                                        <td class="py-4 px-6 font-bold text-gray-900">#<?= $attr['id'] ?></td>
+                                        <td class="py-4 px-6 text-gray-700">Besoin #<?= $attr['id_besoin'] ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($attr['nom_ville']) ?></td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?>
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-gray-700"><?= date('d/m/Y H:i', strtotime($attr['date_dispatch'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Remaining Open Needs -->
+            <?php if (!empty($besoinsOuverts)): ?>
+                <div class="glass-card rounded-2xl p-8 shadow-xl mb-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Besoins Ouverts Restants (<?= count($besoinsOuverts) ?>)</h2>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Ces besoins n'ont pas pu être satisfaits car la quantité du don était insuffisante.
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b-2 border-yellow-200 bg-gradient-to-r from-yellow-500 to-yellow-600">
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Besoin</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Ville</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Région</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Reste à satisfaire</th>
+                                    <th class="text-left py-4 px-6 text-white font-semibold text-sm">Date besoin</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <?php foreach ($besoinsOuverts as $besoin): ?>
+                                    <tr class="hover:bg-yellow-50/50 transition-colors">
+                                        <td class="py-4 px-6 font-bold text-gray-900">#<?= $besoin['id'] ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($besoin['nom_ville']) ?></td>
+                                        <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($besoin['nom_region']) ?></td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                                                <?= number_format($besoin['reste'], 0, ',', ' ') ?>
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-gray-700"><?= date('d/m/Y H:i', strtotime($besoin['date_besoin'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap justify-center gap-4 mt-8">
+                <a href="<?= $base_url ?>dons/create" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Ajouter un autre don
+                </a>
+                <a href="<?= $base_url ?>test/dispatch" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    Voir tous les dons
+                </a>
+            </div>
         </div>
-    </div>
+    </section>
 </body>
 </html>

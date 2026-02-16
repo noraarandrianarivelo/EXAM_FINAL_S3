@@ -1,366 +1,296 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultat du Dispatch - Don #<?= $don['id'] ?></title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            padding: 30px;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #667eea;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        .alert {
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-size: 1.1em;
-        }
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 5px solid #28a745;
-        }
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 5px solid #dc3545;
-        }
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-        }
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .card-before h2 {
-            color: #6c757d;
-        }
-        .card-after h2 {
-            color: #28a745;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-item {
-            text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 5px;
-        }
-        .stat-label {
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #333;
-        }
-        .stat-change {
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-        .stat-change.positive {
-            color: #28a745;
-        }
-        .stat-change.negative {
-            color: #dc3545;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            font-size: 0.9em;
-        }
-        th {
-            background: #667eea;
-            color: white;
-            font-weight: 600;
-        }
-        .card-after th {
-            background: #28a745;
-        }
-        tr:hover {
-            background: #f5f5f5;
-        }
-        .highlight-new {
-            background: #d4edda !important;
-            font-weight: 600;
-        }
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .badge-warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .badge-new {
-            background: #28a745;
-            color: white;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-        .btn-success {
-            background: #28a745;
-        }
-        .btn-success:hover {
-            background: #218838;
-        }
-        .actions {
-            text-align: center;
-            margin-top: 30px;
-        }
-        @media (max-width: 768px) {
-            .comparison {
-                grid-template-columns: 1fr;
+    <title>BNGRC - Résultat Dispatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
             }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        ::selection {
+            background: #0d9488;
+            color: white;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+            50% { opacity: 0.8; box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); }
+        }
+        .pulse-new {
+            animation: pulse-glow 2s infinite;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <a href="/test/dispatch" class="back-link">← Retour à la liste des dons</a>
-        
-        <h1>✅ Résultat du Dispatch - Don #<?= $don['id'] ?></h1>
+<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+    <section class="py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Back Link -->
+            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium mb-6 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Retour à la liste des dons
+            </a>
 
-        <?php if ($resultat): ?>
-            <div class="alert alert-success">
-                <strong>✅ Succès !</strong> Le dispatch a été exécuté avec succès. 
-                <?= count($nouvelles) ?> nouvelle(s) attribution(s) créée(s).
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full text-green-700 text-xs font-semibold uppercase tracking-wider mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Résultat Dispatch
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3">
+                    Don #<span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500"><?= $don['id'] ?></span>
+                </h1>
             </div>
-        <?php else: ?>
-            <div class="alert alert-danger">
-                <strong>❌ Échec</strong> Le dispatch n'a pas pu être exécuté (don vide ou déjà entièrement dispatché).
-            </div>
-        <?php endif; ?>
 
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-label">Quantité totale</div>
-                <div class="stat-value"><?= number_format($don['quantite'], 0, ',', ' ') ?></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Quantité utilisée</div>
-                <div class="stat-value"><?= number_format($apres['utilise'], 0, ',', ' ') ?></div>
-                <?php if ($apres['utilise'] > $avant['utilise']): ?>
-                    <div class="stat-change positive">
-                        +<?= number_format($apres['utilise'] - $avant['utilise'], 0, ',', ' ') ?>
+            <!-- Alert -->
+            <?php if ($resultat): ?>
+                <div class="glass-card rounded-xl p-5 mb-8 border-l-4 border-green-500 bg-green-50/80">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-green-900 mb-1 text-lg">Succès !</h3>
+                            <p class="text-green-800">
+                                Le dispatch a été exécuté avec succès. <?= count($nouvelles) ?> nouvelle(s) attribution(s) créée(s).
+                            </p>
+                        </div>
                     </div>
-                <?php endif; ?>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Reste disponible</div>
-                <div class="stat-value"><?= number_format($apres['reste'], 0, ',', ' ') ?></div>
-                <?php if ($apres['reste'] < $avant['reste']): ?>
-                    <div class="stat-change negative">
-                        <?= number_format($apres['reste'] - $avant['reste'], 0, ',', ' ') ?>
+                </div>
+            <?php else: ?>
+                <div class="glass-card rounded-xl p-5 mb-8 border-l-4 border-red-500 bg-red-50/80">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-red-900 mb-1 text-lg">Échec</h3>
+                            <p class="text-red-800">
+                                Le dispatch n'a pas pu être exécuté (don vide ou déjà entièrement dispatché).
+                            </p>
+                        </div>
                     </div>
-                <?php endif; ?>
-            </div>
-        </div>
+                </div>
+            <?php endif; ?>
 
-        <div class="comparison">
-            <!-- AVANT -->
-            <div class="card card-before">
-                <h2>⏪ AVANT le dispatch</h2>
-                
-                <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 1.1em;">Besoins ouverts (<?= count($avant['besoins']) ?>)</h3>
-                <?php if (empty($avant['besoins'])): ?>
-                    <p style="color: #999; font-style: italic;">Aucun besoin ouvert</p>
-                <?php else: ?>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Besoin</th>
-                                <th>Ville</th>
-                                <th>Reste</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($avant['besoins'] as $besoin): ?>
-                                <tr>
-                                    <td>#<?= $besoin['id'] ?></td>
-                                    <td><?= htmlspecialchars($besoin['nom_ville']) ?></td>
-                                    <td><?= number_format($besoin['reste'], 0, ',', ' ') ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-
-                <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 1.1em;">Attributions (<?= count($avant['attributions']) ?>)</h3>
-                <?php if (empty($avant['attributions'])): ?>
-                    <p style="color: #999; font-style: italic;">Aucune attribution</p>
-                <?php else: ?>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Ville</th>
-                                <th>Quantité</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($avant['attributions'] as $attr): ?>
-                                <tr>
-                                    <td>#<?= $attr['id'] ?></td>
-                                    <td><?= htmlspecialchars($attr['nom_ville']) ?></td>
-                                    <td><?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-            </div>
-
-            <!-- APRÈS -->
-            <div class="card card-after">
-                <h2>⏩ APRÈS le dispatch</h2>
-                
-                <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 1.1em;">Besoins ouverts (<?= count($apres['besoins']) ?>)</h3>
-                <?php if (empty($apres['besoins'])): ?>
-                    <p style="color: #28a745; font-weight: 600;">✅ Tous les besoins ont été satisfaits !</p>
-                <?php else: ?>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Besoin</th>
-                                <th>Ville</th>
-                                <th>Reste</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($apres['besoins'] as $besoin): ?>
-                                <tr>
-                                    <td>#<?= $besoin['id'] ?></td>
-                                    <td><?= htmlspecialchars($besoin['nom_ville']) ?></td>
-                                    <td><?= number_format($besoin['reste'], 0, ',', ' ') ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-
-                <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 1.1em;">
-                    Attributions (<?= count($apres['attributions']) ?>)
-                    <?php if (count($nouvelles) > 0): ?>
-                        <span class="badge badge-new">+<?= count($nouvelles) ?> nouvelles</span>
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Quantité totale</div>
+                    <div class="text-4xl font-bold text-gray-900"><?= number_format($don['quantite'], 0, ',', ' ') ?></div>
+                </div>
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Quantité utilisée</div>
+                    <div class="text-4xl font-bold text-gray-900"><?= number_format($apres['utilise'], 0, ',', ' ') ?></div>
+                    <?php if ($apres['utilise'] > $avant['utilise']): ?>
+                        <div class="text-sm text-green-600 font-semibold mt-2">
+                            +<?= number_format($apres['utilise'] - $avant['utilise'], 0, ',', ' ') ?>
+                        </div>
                     <?php endif; ?>
-                </h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Ville</th>
-                            <th>Quantité</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($apres['attributions'] as $attr): ?>
-                            <?php 
-                            $isNew = false;
-                            foreach ($nouvelles as $nouvelle) {
-                                if ($nouvelle['id'] == $attr['id']) {
-                                    $isNew = true;
-                                    break;
-                                }
-                            }
-                            ?>
-                            <tr <?= $isNew ? 'class="highlight-new"' : '' ?>>
-                                <td>
-                                    #<?= $attr['id'] ?>
-                                    <?= $isNew ? '<span class="badge badge-new">NEW</span>' : '' ?>
-                                </td>
-                                <td><?= htmlspecialchars($attr['nom_ville']) ?></td>
-                                <td><?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?></td>
-                                <td><?= date('d/m/Y H:i', strtotime($attr['date_dispatch'])) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                </div>
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg">
+                    <div class="text-sm text-gray-600 mb-2 font-medium">Reste disponible</div>
+                    <div class="text-4xl font-bold text-gray-900"><?= number_format($apres['reste'], 0, ',', ' ') ?></div>
+                    <?php if ($apres['reste'] < $avant['reste']): ?>
+                        <div class="text-sm text-red-600 font-semibold mt-2">
+                            <?= number_format($apres['reste'] - $avant['reste'], 0, ',', ' ') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Comparison Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- AVANT -->
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-gray-500 to-gray-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">AVANT le dispatch</h2>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-900 mt-6 mb-3">Besoins ouverts (<?= count($avant['besoins']) ?>)</h3>
+                    <?php if (empty($avant['besoins'])): ?>
+                        <p class="text-gray-500 italic">Aucun besoin ouvert</p>
+                    <?php else: ?>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b-2 border-gray-300 bg-gradient-to-r from-gray-500 to-gray-600">
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Besoin</th>
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Ville</th>
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Reste</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <?php foreach ($avant['besoins'] as $besoin): ?>
+                                        <tr class="hover:bg-gray-50/50">
+                                            <td class="py-3 px-4 font-bold text-gray-900">#<?= $besoin['id'] ?></td>
+                                            <td class="py-3 px-4 text-gray-700"><?= htmlspecialchars($besoin['nom_ville']) ?></td>
+                                            <td class="py-3 px-4 text-gray-900 font-medium"><?= number_format($besoin['reste'], 0, ',', ' ') ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+
+                    <h3 class="text-lg font-semibold text-gray-900 mt-6 mb-3">Attributions (<?= count($avant['attributions']) ?>)</h3>
+                    <?php if (empty($avant['attributions'])): ?>
+                        <p class="text-gray-500 italic">Aucune attribution</p>
+                    <?php else: ?>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b-2 border-gray-300 bg-gradient-to-r from-gray-500 to-gray-600">
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">ID</th>
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Ville</th>
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Quantité</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <?php foreach ($avant['attributions'] as $attr): ?>
+                                        <tr class="hover:bg-gray-50/50">
+                                            <td class="py-3 px-4 font-bold text-gray-900">#<?= $attr['id'] ?></td>
+                                            <td class="py-3 px-4 text-gray-700"><?= htmlspecialchars($attr['nom_ville']) ?></td>
+                                            <td class="py-3 px-4 text-gray-900 font-medium"><?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- APRÈS -->
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">APRÈS le dispatch</h2>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-900 mt-6 mb-3">Besoins ouverts (<?= count($apres['besoins']) ?>)</h3>
+                    <?php if (empty($apres['besoins'])): ?>
+                        <div class="glass-card rounded-lg p-4 bg-green-50/80 border border-green-200">
+                            <p class="text-green-700 font-semibold inline-flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Tous les besoins ont été satisfaits !
+                            </p>
+                        </div>
+                    <?php else: ?>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b-2 border-green-300 bg-gradient-to-r from-green-500 to-green-600">
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Besoin</th>
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Ville</th>
+                                        <th class="text-left py-3 px-4 text-white font-semibold text-sm">Reste</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <?php foreach ($apres['besoins'] as $besoin): ?>
+                                        <tr class="hover:bg-green-50/50">
+                                            <td class="py-3 px-4 font-bold text-gray-900">#<?= $besoin['id'] ?></td>
+                                            <td class="py-3 px-4 text-gray-700"><?= htmlspecialchars($besoin['nom_ville']) ?></td>
+                                            <td class="py-3 px-4 text-gray-900 font-medium"><?= number_format($besoin['reste'], 0, ',', ' ') ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+
+                    <h3 class="text-lg font-semibold text-gray-900 mt-6 mb-3 inline-flex items-center gap-2">
+                        Attributions (<?= count($apres['attributions']) ?>)
+                        <?php if (count($nouvelles) > 0): ?>
+                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-green-500 text-white rounded-full text-xs font-bold pulse-new">
+                                +<?= count($nouvelles) ?> nouvelles
+                            </span>
+                        <?php endif; ?>
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b-2 border-green-300 bg-gradient-to-r from-green-500 to-green-600">
+                                    <th class="text-left py-3 px-4 text-white font-semibold text-sm">ID</th>
+                                    <th class="text-left py-3 px-4 text-white font-semibold text-sm">Ville</th>
+                                    <th class="text-left py-3 px-4 text-white font-semibold text-sm">Quantité</th>
+                                    <th class="text-left py-3 px-4 text-white font-semibold text-sm">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <?php foreach ($apres['attributions'] as $attr): ?>
+                                    <?php 
+                                    $isNew = false;
+                                    foreach ($nouvelles as $nouvelle) {
+                                        if ($nouvelle['id'] == $attr['id']) {
+                                            $isNew = true;
+                                            break;
+                                        }
+                                    }
+                                    ?>
+                                    <tr class="<?= $isNew ? 'bg-green-100/80 font-semibold' : 'hover:bg-green-50/50' ?>">
+                                        <td class="py-3 px-4 font-bold text-gray-900">
+                                            #<?= $attr['id'] ?>
+                                            <?= $isNew ? '<span class="ml-2 inline-flex items-center px-2 py-0.5 bg-green-500 text-white rounded-full text-xs font-bold pulse-new">NEW</span>' : '' ?>
+                                        </td>
+                                        <td class="py-3 px-4 text-gray-700"><?= htmlspecialchars($attr['nom_ville']) ?></td>
+                                        <td class="py-3 px-4 text-gray-900 font-medium"><?= number_format($attr['quantite_dispatch'], 0, ',', ' ') ?></td>
+                                        <td class="py-3 px-4 text-gray-700"><?= date('d/m/Y H:i', strtotime($attr['date_dispatch'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap justify-center gap-4 mt-8">
+                <a href="<?= Flight::get() ?>test/dispatch" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Retour à la liste
+                </a>
+                <a href="<?= Flight::get() ?>test/dispatch/don/<?= $don['id'] ?>" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Tester à nouveau
+                </a>
             </div>
         </div>
-
-        <div class="actions">
-            <a href="/test/dispatch" class="btn">← Retour à la liste</a>
-            <a href="/test/dispatch/don/<?= $don['id'] ?>" class="btn btn-success">🔄 Tester à nouveau</a>
-        </div>
-    </div>
+    </section>
 </body>
 </html>
