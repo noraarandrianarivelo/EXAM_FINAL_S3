@@ -194,9 +194,10 @@ class BesoinModel
     public function getByVille($id_ville)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT b.*, cb.nom as nom_categorie 
+        $STH = $DBH->prepare('SELECT b.*, cb.nom as nom_categorie, tb.nom as nom_type
                               FROM besoin b
                               INNER JOIN categorie_besoin cb ON b.id_categorie_besoin = cb.id
+                              INNER JOIN type_besoin tb ON cb.id_type_besoin = tb.id
                               WHERE b.id_ville = ? 
                               ORDER BY b.date_besoin DESC');
         $STH->execute([$id_ville]);
@@ -234,12 +235,14 @@ class BesoinModel
         $DBH = $this->db;
         $STH = $DBH->prepare('SELECT b.*, 
                               v.nom as nom_ville,
+                              r.nom as nom_region,
                               (b.quantite - COALESCE(SUM(a.quantite_dispatch), 0)) as reste
                               FROM besoin b
                               INNER JOIN ville v ON b.id_ville = v.id
+                              INNER JOIN region r ON v.id_region = r.id
                               LEFT JOIN attribution a ON b.id = a.id_besoin
                               WHERE b.id_categorie_besoin = ?
-                              GROUP BY b.id, b.pu, b.quantite, b.id_categorie_besoin, b.id_ville, b.date_besoin, b.created_at, v.nom
+                              GROUP BY b.id, b.pu, b.quantite, b.id_categorie_besoin, b.id_ville, b.date_besoin, b.created_at, v.nom, r.nom
                               HAVING reste > 0
                               ORDER BY b.date_besoin ASC');
         $STH->execute([$id_categorie_besoin]);
