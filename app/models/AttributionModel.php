@@ -139,10 +139,9 @@ class AttributionModel
         $DBH = $this->db;
         $STH = $DBH->query('SELECT a.*, 
                             b.quantite as quantite_besoin,
-                            b.pu as pu_besoin,
                             d.quantite as quantite_don,
-                            d.pu as pu_don,
                             cb.nom as nom_categorie,
+                            cb.pu,
                             v.nom as nom_ville,
                             r.nom as nom_region
                             FROM bngrc_attribution a
@@ -167,10 +166,9 @@ class AttributionModel
         $DBH = $this->db;
         $STH = $DBH->prepare('SELECT a.*, 
                               b.quantite as quantite_besoin,
-                              b.pu as pu_besoin,
                               d.quantite as quantite_don,
-                              d.pu as pu_don,
                               cb.nom as nom_categorie,
+                              cb.pu,
                               v.nom as nom_ville,
                               r.nom as nom_region
                               FROM bngrc_attribution a
@@ -189,9 +187,11 @@ class AttributionModel
     public function getByBesoin($id_besoin)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT a.*, d.quantite as quantite_don, d.pu as pu_don
+        $STH = $DBH->prepare('SELECT a.*, d.quantite as quantite_don, cb.pu
                               FROM bngrc_attribution a
                               INNER JOIN bngrc_don d ON a.id_don = d.id
+                              INNER JOIN bngrc_besoin b ON a.id_besoin = b.id
+                              INNER JOIN bngrc_categorie_besoin cb ON b.id_categorie_besoin = cb.id
                               WHERE a.id_besoin = ? 
                               ORDER BY a.date_dispatch DESC');
         $STH->execute([$id_besoin]);
