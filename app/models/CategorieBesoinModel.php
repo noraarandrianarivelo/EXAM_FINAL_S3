@@ -65,7 +65,7 @@ class CategorieBesoinModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO categorie_besoin (nom, id_type_besoin) VALUES (?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_categorie_besoin (nom, id_type_besoin) VALUES (?, ?)');
 
         try {
             $STH->execute([$this->getNom(), $this->getIdTypeBesoin()]);
@@ -78,7 +78,7 @@ class CategorieBesoinModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE categorie_besoin SET nom = ?, id_type_besoin = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_categorie_besoin SET nom = ?, id_type_besoin = ? WHERE id = ?');
 
         try {
             $STH->execute([$this->getNom(), $this->getIdTypeBesoin(), $this->getId()]);
@@ -91,7 +91,7 @@ class CategorieBesoinModel
     public function delete()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('DELETE FROM categorie_besoin WHERE id = ?');
+        $STH = $DBH->prepare('DELETE FROM bngrc_categorie_besoin WHERE id = ?');
 
         try {
             $STH->execute([$this->getId()]);
@@ -104,8 +104,8 @@ class CategorieBesoinModel
     public function getAll()
     {
         $DBH = $this->db;
-        $STH = $DBH->query('SELECT cb.*, tb.nom as nom_type_besoin FROM categorie_besoin cb 
-                            INNER JOIN type_besoin tb ON cb.id_type_besoin = tb.id 
+        $STH = $DBH->query('SELECT cb.*, tb.nom as nom_type_besoin FROM bngrc_categorie_besoin cb 
+                            INNER JOIN bngrc_type_besoin tb ON cb.id_type_besoin = tb.id 
                             ORDER BY cb.nom');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -120,8 +120,8 @@ class CategorieBesoinModel
     public function getById($id)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT cb.*, tb.nom as nom_type_besoin FROM categorie_besoin cb 
-                              INNER JOIN type_besoin tb ON cb.id_type_besoin = tb.id 
+        $STH = $DBH->prepare('SELECT cb.*, tb.nom as nom_type_besoin FROM bngrc_categorie_besoin cb 
+                              INNER JOIN bngrc_type_besoin tb ON cb.id_type_besoin = tb.id 
                               WHERE cb.id = ?');
         $STH->execute([$id]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
@@ -132,7 +132,7 @@ class CategorieBesoinModel
     public function getByTypeBesoin($id_type_besoin)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT * FROM categorie_besoin WHERE id_type_besoin = ? ORDER BY nom');
+        $STH = $DBH->prepare('SELECT * FROM bngrc_categorie_besoin WHERE id_type_besoin = ? ORDER BY nom');
         $STH->execute([$id_type_besoin]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 

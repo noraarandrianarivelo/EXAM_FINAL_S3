@@ -87,7 +87,7 @@ class DonModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO don (pu, quantite, id_categorie_besoin, date_saisie) VALUES (?, ?, ?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_don (pu, quantite, id_categorie_besoin, date_saisie) VALUES (?, ?, ?, ?)');
 
         try {
             $STH->execute([
@@ -105,7 +105,7 @@ class DonModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE don SET pu = ?, quantite = ?, id_categorie_besoin = ?, date_saisie = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_don SET pu = ?, quantite = ?, id_categorie_besoin = ?, date_saisie = ? WHERE id = ?');
 
         try {
             $STH->execute([
@@ -124,7 +124,7 @@ class DonModel
     public function delete()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('DELETE FROM don WHERE id = ?');
+        $STH = $DBH->prepare('DELETE FROM bngrc_don WHERE id = ?');
 
         try {
             $STH->execute([$this->getId()]);
@@ -140,9 +140,9 @@ class DonModel
         $STH = $DBH->query('SELECT d.*, 
                             cb.nom as nom_categorie,
                             tb.nom as nom_type_besoin
-                            FROM don d
-                            INNER JOIN categorie_besoin cb ON d.id_categorie_besoin = cb.id
-                            INNER JOIN type_besoin tb ON cb.id_type_besoin = tb.id
+                            FROM bngrc_don d
+                            INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
+                            INNER JOIN bngrc_type_besoin tb ON cb.id_type_besoin = tb.id
                             ORDER BY d.date_saisie DESC');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -160,9 +160,9 @@ class DonModel
         $STH = $DBH->prepare('SELECT d.*, 
                               cb.nom as nom_categorie,
                               tb.nom as nom_type_besoin
-                              FROM don d
-                              INNER JOIN categorie_besoin cb ON d.id_categorie_besoin = cb.id
-                              INNER JOIN type_besoin tb ON cb.id_type_besoin = tb.id
+                              FROM bngrc_don d
+                              INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
+                              INNER JOIN bngrc_type_besoin tb ON cb.id_type_besoin = tb.id
                               WHERE d.id = ?');
         $STH->execute([$id]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
@@ -173,7 +173,7 @@ class DonModel
     public function getByCategorie($id_categorie_besoin)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT * FROM don 
+        $STH = $DBH->prepare('SELECT * FROM bngrc_don 
                               WHERE id_categorie_besoin = ? 
                               ORDER BY date_saisie DESC');
         $STH->execute([$id_categorie_besoin]);
@@ -194,9 +194,9 @@ class DonModel
         $sql = 'SELECT d.*, 
                 cb.nom as nom_categorie,
                 (d.quantite - COALESCE(SUM(a.quantite_dispatch), 0)) as quantite_disponible
-                FROM don d
-                INNER JOIN categorie_besoin cb ON d.id_categorie_besoin = cb.id
-                LEFT JOIN attribution a ON d.id = a.id_don
+                FROM bngrc_don d
+                INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
+                LEFT JOIN bngrc_attribution a ON d.id = a.id_don
                 WHERE 1=1';
         
         if ($id_categorie_besoin !== null) {

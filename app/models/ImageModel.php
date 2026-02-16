@@ -56,7 +56,7 @@ class ImageModel
     {
         $DBH = $this->db;
 
-        $STH = $DBH->prepare('INSERT INTO image (path, description) VALUES (?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_image (path, description) VALUES (?, ?)');
 
         try {
             $STH->execute([$this->getPath(), $this->getDescription()]);
@@ -76,7 +76,7 @@ class ImageModel
     {
         $DBH = $this->db;
 
-        $STH = $DBH->query('SELECT * FROM image');
+        $STH = $DBH->query('SELECT * FROM bngrc_image');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
         $resultats = [];
@@ -93,7 +93,7 @@ class ImageModel
 
         $data = array($id);
 
-        $STH = $DBH->prepare('SELECT * FROM image WHERE id = ?');
+        $STH = $DBH->prepare('SELECT * FROM bngrc_image where id = ?');
         $STH->execute($data);
 
         $STH->setFetchMode(PDO::FETCH_ASSOC);

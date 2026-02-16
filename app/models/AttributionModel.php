@@ -87,7 +87,7 @@ class AttributionModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO attribution (id_besoin, id_don, quantite_dispatch, date_dispatch) VALUES (?, ?, ?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_attribution (id_besoin, id_don, quantite_dispatch, date_dispatch) VALUES (?, ?, ?, ?)');
 
         try {
             $STH->execute([
@@ -105,7 +105,7 @@ class AttributionModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE attribution SET id_besoin = ?, id_don = ?, quantite_dispatch = ?, date_dispatch = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_attribution SET id_besoin = ?, id_don = ?, quantite_dispatch = ?, date_dispatch = ? WHERE id = ?');
 
         try {
             $STH->execute([
@@ -124,7 +124,7 @@ class AttributionModel
     public function delete()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('DELETE FROM attribution WHERE id = ?');
+        $STH = $DBH->prepare('DELETE FROM bngrc_attribution WHERE id = ?');
 
         try {
             $STH->execute([$this->getId()]);
@@ -145,12 +145,12 @@ class AttributionModel
                             cb.nom as nom_categorie,
                             v.nom as nom_ville,
                             r.nom as nom_region
-                            FROM attribution a
-                            INNER JOIN besoin b ON a.id_besoin = b.id
-                            INNER JOIN don d ON a.id_don = d.id
-                            INNER JOIN categorie_besoin cb ON b.id_categorie_besoin = cb.id
-                            INNER JOIN ville v ON b.id_ville = v.id
-                            INNER JOIN region r ON v.id_region = r.id
+                            FROM bngrc_attribution a
+                            INNER JOIN bngrc_besoin b ON a.id_besoin = b.id
+                            INNER JOIN bngrc_don d ON a.id_don = d.id
+                            INNER JOIN bngrc_categorie_besoin cb ON b.id_categorie_besoin = cb.id
+                            INNER JOIN bngrc_ville v ON b.id_ville = v.id
+                            INNER JOIN bngrc_region r ON v.id_region = r.id
                             ORDER BY a.date_dispatch DESC');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -173,12 +173,12 @@ class AttributionModel
                               cb.nom as nom_categorie,
                               v.nom as nom_ville,
                               r.nom as nom_region
-                              FROM attribution a
-                              INNER JOIN besoin b ON a.id_besoin = b.id
-                              INNER JOIN don d ON a.id_don = d.id
-                              INNER JOIN categorie_besoin cb ON b.id_categorie_besoin = cb.id
-                              INNER JOIN ville v ON b.id_ville = v.id
-                              INNER JOIN region r ON v.id_region = r.id
+                              FROM bngrc_attribution a
+                              INNER JOIN bngrc_besoin b ON a.id_besoin = b.id
+                              INNER JOIN bngrc_don d ON a.id_don = d.id
+                              INNER JOIN bngrc_categorie_besoin cb ON b.id_categorie_besoin = cb.id
+                              INNER JOIN bngrc_ville v ON b.id_ville = v.id
+                              INNER JOIN bngrc_region r ON v.id_region = r.id
                               WHERE a.id = ?');
         $STH->execute([$id]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
@@ -190,8 +190,8 @@ class AttributionModel
     {
         $DBH = $this->db;
         $STH = $DBH->prepare('SELECT a.*, d.quantite as quantite_don, d.pu as pu_don
-                              FROM attribution a
-                              INNER JOIN don d ON a.id_don = d.id
+                              FROM bngrc_attribution a
+                              INNER JOIN bngrc_don d ON a.id_don = d.id
                               WHERE a.id_besoin = ? 
                               ORDER BY a.date_dispatch DESC');
         $STH->execute([$id_besoin]);
@@ -209,9 +209,9 @@ class AttributionModel
     {
         $DBH = $this->db;
         $STH = $DBH->prepare('SELECT a.*, b.quantite as quantite_besoin, v.nom as nom_ville
-                              FROM attribution a
-                              INNER JOIN besoin b ON a.id_besoin = b.id
-                              INNER JOIN ville v ON b.id_ville = v.id
+                              FROM bngrc_attribution a
+                              INNER JOIN bngrc_besoin b ON a.id_besoin = b.id
+                              INNER JOIN bngrc_ville v ON b.id_ville = v.id
                               WHERE a.id_don = ? 
                               ORDER BY a.date_dispatch DESC');
         $STH->execute([$id_don]);

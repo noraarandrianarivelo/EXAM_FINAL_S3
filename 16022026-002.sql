@@ -4,7 +4,7 @@
 -- =========================
 
 -- Insertion des régions
-INSERT INTO region (nom) VALUES 
+INSERT INTO bngrc_region (nom) VALUES 
 ('Analamanga'),
 ('Vakinankaratra'),
 ('Itasy'),
@@ -13,7 +13,7 @@ INSERT INTO region (nom) VALUES
 ('Atsimo-Andrefana');
 
 -- Insertion des villes
-INSERT INTO ville (nom, id_region) VALUES 
+INSERT INTO bngrc_ville (nom, id_region) VALUES 
 -- Analamanga
 ('Antananarivo', 1),
 ('Ambohidratrimo', 1),
@@ -36,13 +36,13 @@ INSERT INTO ville (nom, id_region) VALUES
 ('Morombe', 6);
 
 -- Insertion des types de besoin
-INSERT INTO type_besoin (nom) VALUES 
+INSERT INTO bngrc_type_besoin (nom) VALUES 
 ('Nature'),
 ('Matériaux'),
 ('Argent');
 
 -- Insertion des catégories de besoin
-INSERT INTO categorie_besoin (nom, id_type_besoin) VALUES 
+INSERT INTO bngrc_categorie_besoin (nom, id_type_besoin) VALUES 
 -- Nature
 ('Riz', 1),
 ('Huile', 1),
@@ -59,7 +59,7 @@ INSERT INTO categorie_besoin (nom, id_type_besoin) VALUES
 ('Aide financière', 3);
 
 -- Insertion des besoins
-INSERT INTO besoin (pu, quantite, id_categorie_besoin, id_ville, date_besoin) VALUES 
+INSERT INTO bngrc_besoin (pu, quantite, id_categorie_besoin, id_ville, date_besoin) VALUES 
 -- Antananarivo - après cyclone
 (3000.00, 500, 1, 1, '2026-01-15 10:00:00'),  -- Riz
 (8000.00, 200, 2, 1, '2026-01-15 10:30:00'),  -- Huile
@@ -102,12 +102,7 @@ INSERT INTO besoin (pu, quantite, id_categorie_besoin, id_ville, date_besoin) VA
 (50000.00, 60, 11, 6, '2026-02-14 09:30:00'); -- Aide financière
 
 -- Insertion des dons
-INSERT INTO don (pu, quantite, id_categorie_besoin, date_saisie) VALUES 
--- Dons du 10 janvier
-(3000.00, 1000, 1, '2026-01-10 14:00:00'), -- Riz
-(8000.00, 300, 2, '2026-01-10 14:30:00'),  -- Huile
-(25000.00, 200, 6, '2026-01-10 15:00:00'), -- Tôle
-
+INSERT INTO bngrc_don (pu, quantite, id_categorie_besoin, date_saisie) VALUES 
 -- Dons du 18 janvier
 (3000.00, 1500, 1, '2026-01-18 10:00:00'), -- Riz
 (2000.00, 1000, 4, '2026-01-18 10:30:00'), -- Eau potable
