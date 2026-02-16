@@ -228,4 +228,28 @@ class BesoinModel
 
         return $resultats;
     }
+
+    public function getBesoinsOuverts($id_categorie_besoin)
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('SELECT b.*, 
+                              v.nom as nom_ville,
+                              (b.quantite - COALESCE(SUM(a.quantite_dispatch), 0)) as reste
+                              FROM besoin b
+                              INNER JOIN ville v ON b.id_ville = v.id
+                              LEFT JOIN attribution a ON b.id = a.id_besoin
+                              WHERE b.id_categorie_besoin = ?
+                              GROUP BY b.id, b.pu, b.quantite, b.id_categorie_besoin, b.id_ville, b.date_besoin, b.created_at, v.nom
+                              HAVING reste > 0
+                              ORDER BY b.date_besoin ASC');
+        $STH->execute([$id_categorie_besoin]);
+        $STH->setFetchMode(PDO::FETCH_ASSOC);
+
+        $resultats = [];
+        while ($row = $STH->fetch()) {
+            $resultats[] = $row;
+        }
+
+        return $resultats;
+    }
 }
