@@ -3,6 +3,7 @@
 use app\controllers\DashboardController;
 use app\controllers\TestController;
 use app\controllers\DonController;
+use app\controllers\AchatController;
 use app\middlewares\SecurityHeadersMiddleware;
 use flight\Engine;
 use flight\net\Router;
@@ -29,6 +30,14 @@ $router->group('', function(Router $router) use ($app) {
 		$router->get('/dispatch', [ TestController::class, 'index' ]);
 		$router->get('/dispatch/don/@id:[0-9]+', [ TestController::class, 'showDon' ]);
 		$router->post('/dispatch/don/@id:[0-9]+', [ TestController::class, 'dispatch' ]);
+	});
+
+	// Routes pour les achats
+	$router->group('/achats', function(Router $router) {
+		$router->get('', [ AchatController::class, 'index' ]);
+		$router->get('/besoins-achetables', [ AchatController::class, 'listBesoinsAchetables' ]);
+		$router->post('/acheter', [ AchatController::class, 'acheter' ]);
+		$router->get('/@id:[0-9]+', [ AchatController::class, 'show' ]);
 	});
 
 	// $router->get('/uploader', function() use ($app) {
