@@ -79,8 +79,12 @@ if (Debugger::$showBar === true && php_sapi_name() !== 'cli') {
  **********************************************/
 // Configure database connection
 
-// PGSQL Example:
+// MySQL Connection:
 $dsn = 'mysql:host=' . $config['database']['host'] . ';port=' .$config['database']['port']. ';dbname=' . $config['database']['dbname'];
+
+// Register Flight::db() service
+$pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::class;
+$app->register('db', $pdoClass, [ $dsn, $config['database']['user'] ?? null, $config['database']['password'] ?? null ]);
 
 // SQLite Example:
 // if (isset($config['database']['file_path'])) {
