@@ -1,0 +1,54 @@
+But: 
+    APPLICATION DE SUIVI DE COLLECTES ET DES DISTRIBUTIONS DE DONS POUR LES SINISTRES
+
+
+
+    Donnees:
+        - Les sinistres sont repartis par ville dans une region
+
+        - Besoin: 
+            > en nature (riz, huile, ...)
+            > en materiaux (tole, clou, ...)
+            > en argent
+
+    Fonctionnement:
+        - on saisie les besoins des sinistres par ville
+        - on saisie les dons puis on simule le dispatch des dons par ordre de date et de saisie
+
+    Objectifs: 
+        - dans la page tableau de bord, afficher la liste des villes avec leur besoins et les dons deja attribue a chaque ville
+
+    Regle de gestion:
+        - chaque besoin possede: 
+            > prix unitaire
+            > quantite
+
+            PS: le prix unitaire ne change pas
+
+    
+
+
+A faire: 
+    - Fonctionnalites
+    - Design
+    - Todo list (excel)
+    - Code
+    - Framework (FLight)
+
+Livraison:
+    par deploiement
+
+        
+
+
+
+1) Base: 
+    region
+    ville (misy id region)
+    type_besoin (nature, materiaux, argent)
+    categorie_besoin
+    besoin (pu, quantite, id_categorie_besoin, id_ville, date)
+    don (pu, quantite, id_categorie_besoin, id_ville, date_saisie)
+    attribution (id_besoin, id_don, quantite_dispatch, date_dispatch)
+
+
