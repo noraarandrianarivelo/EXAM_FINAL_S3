@@ -48,7 +48,38 @@ Livraison:
     type_besoin (nature, materiaux, argent)
     categorie_besoin
     besoin (pu, quantite, id_categorie_besoin, id_ville, date)
-    don (pu, quantite, id_categorie_besoin, id_ville, date_saisie)
+    don (pu, quantite, id_categorie_besoin, date_saisie)
     attribution (id_besoin, id_don, quantite_dispatch, date_dispatch)
+
+2) 
+    creer les modeles
+
+    creer tableau de bord: afficher la liste des villes avec leur besoins et les dons deja attribue a chaque ville
+        - lien : vers ville pour voir la liste des villes
+        - besoins : voir la liste des besoins deja envoye par ville
+        - dons : voir la liste des dons recolte
+        - lien pour ajouter un nouveau categorie_besoin
+        - lien pour ajouter type_besoin
+        - regions
+
+
+    creer les controller et les routes correspondant
+
+
+
+    creer les pages villes
+    creer la page besoin
+    creer la page dons
+    page categorie_besoin
+    page type_besoin
+    page regions
+
+
+    faire marcher ces pages
+
+
+
+
+
 
 
