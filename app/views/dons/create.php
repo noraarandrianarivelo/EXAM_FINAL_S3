@@ -55,7 +55,7 @@
                     Ajouter un <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Don</span>
                 </h1>
                 <p class="text-lg text-gray-600">
-                    Le dispatch sera automatiquement exécuté après l'ajout du don
+                    Vous pourrez simuler ou valider le dispatch après l'ajout du don
                 </p>
             </div>
 
