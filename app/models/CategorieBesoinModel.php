@@ -9,6 +9,7 @@ class CategorieBesoinModel
 {
     private $id;
     private $nom;
+    private $pu;
     private $id_type_besoin;
     private $created_at;
 
@@ -41,6 +42,16 @@ class CategorieBesoinModel
         $this->nom = $nom;
     }
 
+    public function getPu()
+    {
+        return $this->pu;
+    }
+
+    public function setPu($pu)
+    {
+        $this->pu = $pu;
+    }
+
     public function getIdTypeBesoin()
     {
         return $this->id_type_besoin;
@@ -65,10 +76,10 @@ class CategorieBesoinModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO bngrc_categorie_besoin (nom, id_type_besoin) VALUES (?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_categorie_besoin (nom, pu, id_type_besoin) VALUES (?, ?, ?)');
 
         try {
-            $STH->execute([$this->getNom(), $this->getIdTypeBesoin()]);
+            $STH->execute([$this->getNom(), $this->getPu(), $this->getIdTypeBesoin()]);
             return $DBH->lastInsertId();
         } catch (PDOException $e) {
             throw new PDOException("Erreur lors de l'ajout de la catégorie de besoin : " . $e->getMessage());
@@ -78,10 +89,10 @@ class CategorieBesoinModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE bngrc_categorie_besoin SET nom = ?, id_type_besoin = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_categorie_besoin SET nom = ?, pu = ?, id_type_besoin = ? WHERE id = ?');
 
         try {
-            $STH->execute([$this->getNom(), $this->getIdTypeBesoin(), $this->getId()]);
+            $STH->execute([$this->getNom(), $this->getPu(), $this->getIdTypeBesoin(), $this->getId()]);
             return true;
         } catch (PDOException $e) {
             throw new PDOException("Erreur lors de la mise à jour de la catégorie de besoin : " . $e->getMessage());
