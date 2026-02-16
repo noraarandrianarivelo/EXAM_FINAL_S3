@@ -66,12 +66,12 @@ return [
 	 *         Database Settings          *
 	 **************************************/
 	'database' => [
-		// PGSQL Example:
-		'host'     => 'localhost',      // Database host (e.g., 'localhost', 'db.example.com')
-		'port'	=> '5432',
-		'dbname'   => 'uploadimage',   // Database name (e.g., 'flightphp')
-		'user'     => 'noraa',  // Database user (e.g., 'root')
-		'password' => 'noraa',  // Database password (never commit real passwords)
+		// MySQL Configuration:
+		'host'     => 'localhost',      // Database host
+		'port'     => '3306',           // MySQL default port
+		'dbname'   => 'BNGRC',          // Database name
+		'user'     => 'root',           // Database user
+		'password' => '',               // Database password
 
 		// SQLite Example:
 		// 'file_path' => __DIR__ . $ds . '..' . $ds . 'database.sqlite', // Path to SQLite file

@@ -30,16 +30,21 @@ class PdoQueryCapture extends \flight\database\PdoWrapper {
 	/**
 	 * Executes an SQL statement, returning a result set as a PDOStatement object
 	 *
-	 * @param string $query      query to run
-	 * @param int    $fetchMode  how the results will be returned
-	 * @param mixed  $arg3       nobody knows...
-	 * @param array  $ctorargs   Arguments of custom class constructor when the mode parameter is set to PDO::FETCH_CLASS
-	 * @return void
+	 * @param string   $query           query to run
+	 * @param int|null $fetchMode       how the results will be returned
+	 * @param mixed    ...$fetch_mode_args additional fetch mode arguments
+	 * @return PDOStatement|false
 	 */
 	public function query(string $query, int|null $fetchMode = null, mixed ...$fetch_mode_args): PDOStatement|false
 	{
 		$start_time = microtime(true);
-			$result = parent::query($query, $fetchMode, $fetch_mode_args);
+		if ($fetchMode !== null && count($fetch_mode_args) > 0) {
+			$result = parent::query($query, $fetchMode, ...$fetch_mode_args);
+		} elseif ($fetchMode !== null) {
+			$result = parent::query($query, $fetchMode);
+		} else {
+			$result = parent::query($query);
+		}
 		$end_time = microtime(true);
 		$execution_time = $end_time - $start_time;
 		self::$query_data[uniqid("", true)] = [
@@ -47,7 +52,7 @@ class PdoQueryCapture extends \flight\database\PdoWrapper {
 			'execution_time' => $execution_time,
 			'params' => [],
 			'backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
-			'rows' => $result->rowCount()
+			'rows' => ($result instanceof PDOStatement) ? $result->rowCount() : 0
 		];
 		return $result;
 	}
@@ -56,7 +61,7 @@ class PdoQueryCapture extends \flight\database\PdoWrapper {
 	 * Execute an SQL statement and return the number of affected rows
 	 *
 	 * @param string $statement SQL Statement to run
-	 * @return PdoQueryCaptureStatement|false
+	 * @return int|false
 	 */
 	public function exec(string $statement): int|false
 	{
@@ -69,7 +74,7 @@ class PdoQueryCapture extends \flight\database\PdoWrapper {
 			'execution_time' => $execution_time,
 			'params' => [],
 			'backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
-			'rows' => (int) $result
+			'rows' => ($result !== false) ? (int) $result : 0
 		];
 		return $result;
 	}
@@ -87,6 +92,9 @@ class PdoQueryCapture extends \flight\database\PdoWrapper {
 		$statement = parent::prepare($query, $options);
 		$end_time = microtime(true);
 		$execution_time = $end_time - $start_time;
+		if ($statement === false) {
+			return false;
+		}
 		self::$query_data[$statement->unique_value] = [
 			'query' => $query,
 			'prepare_time' => $execution_time,

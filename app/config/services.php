@@ -77,18 +77,35 @@ if (Debugger::$showBar === true && php_sapi_name() !== 'cli') {
 /**********************************************
  *           Database Service Setup           *
  **********************************************/
-// Uncomment and configure the following for your database:
+// Configure database connection
 
-// PGSQL Example:
-$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' .$config['database']['port']. ';dbname=' . $config['database']['dbname'];
+// MySQL Connection (XAMPP)
+if (!empty($config['database']['host']) && !empty($config['database']['dbname'])) {
+    $dsn = 'mysql:host=' . $config['database']['host'] 
+         . ';port=' . ($config['database']['port'] ?? '3306') 
+         . ';dbname=' . $config['database']['dbname']
+         . ';charset=utf8mb4'
+         . ';unix_socket=/opt/lampp/var/mysql/mysql.sock';
+    
+    $dbUser = $config['database']['user'] ?? '';
+    $dbPass = $config['database']['password'] ?? '';
+    
+    // Register Flight::db() service
+    // In development, use PdoQueryCapture to log queries; in production, use PdoWrapper for performance.
+    $pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::class;
+    
+    $app->register('db', $pdoClass, [$dsn, $dbUser, $dbPass], function($db) {
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    });
+}
 
 // SQLite Example:
-// $dsn = 'sqlite:' . $config['database']['file_path'];
-
-// Register Flight::db() service
-// In development, use PdoQueryCapture to log queries; in production, use PdoWrapper for performance.
-$pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::class;
-$app->register('db', $pdoClass, [ $dsn, $config['database']['user'] ?? null, $config['database']['password'] ?? null ]);
+// if (isset($config['database']['file_path'])) {
+//     $dsn = 'sqlite:' . $config['database']['file_path'];
+//     $pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::class;
+//     $app->register('db', $pdoClass, [ $dsn ]);
+// }
 
 /**********************************************
  *         Third-Party Integrations           *

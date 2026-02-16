@@ -76,7 +76,7 @@ class ImageModel
     {
         $DBH = $this->db;
 
-        $STH = $DBH->query('SELECT * FROM public.image');
+        $STH = $DBH->query('SELECT * FROM image');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
         $resultats = [];
@@ -93,7 +93,7 @@ class ImageModel
 
         $data = array($id);
 
-        $STH = $DBH->prepare('SELECT * FROM public.image where id = ?');
+        $STH = $DBH->prepare('SELECT * FROM image WHERE id = ?');
         $STH->execute($data);
 
         $STH->setFetchMode(PDO::FETCH_ASSOC);

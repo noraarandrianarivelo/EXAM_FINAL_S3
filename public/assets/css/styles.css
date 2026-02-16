@@ -1,44 +1,66 @@
-/* Reset et styles de base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* BNGRC - Gestion des Dons Humanitaires */
+/* Styles personnalisés */
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* Header */
-header {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+::selection {
+    background: #0d9488;
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
 }
 
-.container {
+/* Glass Effect Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Glass Navigation */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Float Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse Ring Animation */
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Progress Bar with Shimmer Effect */
+.progress-bar {
+    background: linear-gradient(90deg, #14b8a6, #0d9488, #0f766e);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Legacy styles for compatibility */
+/* Reset et styles de base */
+.legacy-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2rem 0;
-}
-
-.logo {
+.legacy-logo {
     font-size: 1.8rem;
     font-weight: 700;
     color: white;
@@ -47,7 +69,7 @@ nav {
     transition: transform 0.3s ease;
 }
 
-.logo:hover {
+.legacy-logo:hover {
     transform: scale(1.05);
 }
 
