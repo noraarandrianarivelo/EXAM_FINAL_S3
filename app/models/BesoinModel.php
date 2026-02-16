@@ -162,10 +162,13 @@ class BesoinModel
     {
         $DBH = $this->db;
         $STH = $DBH->prepare('SELECT b.*, 
-                              cb.nom as nom_categorie, 
+                              cb.nom as nom_categorie,
+                              cb.pu as pu_categorie,
+                              cb.id as id_categorie_besoin,
                               v.nom as nom_ville, 
                               r.nom as nom_region,
-                              tb.nom as nom_type_besoin
+                              tb.nom as type_besoin,
+                              tb.id as id_type_besoin
                               FROM bngrc_besoin b
                               INNER JOIN bngrc_categorie_besoin cb ON b.id_categorie_besoin = cb.id
                               INNER JOIN bngrc_ville v ON b.id_ville = v.id
