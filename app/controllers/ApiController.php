@@ -74,7 +74,7 @@ class ApiController
 
 				// addNewImage($_SESSION['User']['Id_membre'], $uploadDir . $newName);
 				// ModifyPhotoDeProfil($_SESSION['Resultat']['Id_membre'], $uploadDir . $newName);
-				Flight::redirect('/api/images');
+				Flight::redirect(Flight::get('flight.base_url') . 'api/images');
 			} else {
 				header("Location: addNewPhoto.php?errorAdd=1"); //erreur de deplacement
 			}
