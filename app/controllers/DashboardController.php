@@ -96,4 +96,102 @@ class DashboardController
             'stats' => $stats
         ]);
     }
+
+    /**
+     * Affiche la page de récapitulation des besoins en montant
+     */
+    public function recapitulation()
+    {
+        $db = $this->app->db();
+        $stats = $this->calculerStatsRecapitulation($db);
+        
+        $this->app->render('dashboard/recapitulation', [
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * API JSON pour récupérer les statistiques en temps réel
+     */
+    public function getStatsRecapitulation()
+    {
+        $db = $this->app->db();
+        $stats = $this->calculerStatsRecapitulation($db);
+        
+        header('Content-Type: application/json');
+        echo json_encode($stats);
+    }
+
+    /**
+     * Calcule les statistiques de récapitulation
+     */
+    private function calculerStatsRecapitulation($db)
+    {
+        // Calculer le montant total des besoins (quantite * pu_categorie)
+        $queryBesoinsTotal = "
+            SELECT 
+                COALESCE(SUM(b.quantite * cb.pu), 0) as montant_total_besoins,
+                COUNT(b.id) as nombre_besoins
+            FROM bngrc_besoin b
+            INNER JOIN bngrc_categorie_besoin cb ON b.id_categorie_besoin = cb.id
+        ";
+        $stmtBesoins = $db->prepare($queryBesoinsTotal);
+        $stmtBesoins->execute();
+        $besoins = $stmtBesoins->fetch(\PDO::FETCH_ASSOC);
+
+        // Calculer le montant satisfait (quantite_dispatch * pu_categorie)
+        $querySatisfait = "
+            SELECT 
+                COALESCE(SUM(a.quantite_dispatch * cb.pu), 0) as montant_satisfait,
+                COUNT(a.id) as nombre_attributions
+            FROM bngrc_attribution a
+            INNER JOIN bngrc_besoin b ON a.id_besoin = b.id
+            INNER JOIN bngrc_categorie_besoin cb ON b.id_categorie_besoin = cb.id
+        ";
+        $stmtSatisfait = $db->prepare($querySatisfait);
+        $stmtSatisfait->execute();
+        $satisfait = $stmtSatisfait->fetch(\PDO::FETCH_ASSOC);
+
+        // Calculer les achats effectués
+        $queryAchats = "
+            SELECT 
+                COALESCE(SUM(montant_total), 0) as montant_achats,
+                COUNT(id) as nombre_achats
+            FROM bngrc_achat
+        ";
+        $stmtAchats = $db->prepare($queryAchats);
+        $stmtAchats->execute();
+        $achats = $stmtAchats->fetch(\PDO::FETCH_ASSOC);
+
+        // Calculer le montant des dons disponibles
+        $queryDons = "
+            SELECT 
+                COALESCE(SUM(d.quantite * cb.pu), 0) as montant_dons,
+                COUNT(d.id) as nombre_dons
+            FROM bngrc_don d
+            INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
+        ";
+        $stmtDons = $db->prepare($queryDons);
+        $stmtDons->execute();
+        $dons = $stmtDons->fetch(\PDO::FETCH_ASSOC);
+
+        $montantTotal = (float) $besoins['montant_total_besoins'];
+        $montantSatisfait = (float) $satisfait['montant_satisfait'];
+        $montantRestant = $montantTotal - $montantSatisfait;
+        $pourcentageSatisfait = $montantTotal > 0 ? ($montantSatisfait / $montantTotal) * 100 : 0;
+
+        return [
+            'montant_total_besoins' => $montantTotal,
+            'montant_satisfait' => $montantSatisfait,
+            'montant_restant' => $montantRestant,
+            'pourcentage_satisfait' => $pourcentageSatisfait,
+            'nombre_besoins' => (int) $besoins['nombre_besoins'],
+            'nombre_attributions' => (int) $satisfait['nombre_attributions'],
+            'montant_achats' => (float) $achats['montant_achats'],
+            'nombre_achats' => (int) $achats['nombre_achats'],
+            'montant_dons' => (float) $dons['montant_dons'],
+            'nombre_dons' => (int) $dons['nombre_dons'],
+            'timestamp' => date('Y-m-d H:i:s')
+        ];
+    }
 }

@@ -78,6 +78,7 @@
             <!-- Menu Principal -->
             <div class="hidden md:flex items-center gap-8">
                 <a href="<?= Flight::get('flight.base_url') ?>" class="text-sm font-semibold text-teal-700 border-b-2 border-teal-500 pb-1">Tableau de bord</a>
+                <a href="<?= Flight::get('flight.base_url') ?>recapitulation" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Récapitulation</a>
                 <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Nouveau Don</a>
                 <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dispatch</a>
                 <a href="<?= Flight::get('flight.base_url') ?>achats/besoins-achetables" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Achats</a>
