@@ -85,7 +85,6 @@
                                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Ville</th>
                                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Catégorie</th>
                                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Détails</th>
-                                <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Montant</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
                                 <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
@@ -116,9 +115,7 @@
                                             <div class="text-sm font-medium text-gray-700"><?= number_format($b['quantite']) ?> unités</div>
                                             <div class="text-xs text-gray-400"><?= htmlspecialchars($b['nom_type_besoin']) ?></div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                                            <div class="text-sm font-bold text-gray-900"><?= number_format($b['pu'], 0, ',', ' ') ?> Ar</div>
-                                        </td>
+
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <div class="text-sm text-gray-500"><?= date('d/m/Y', strtotime($b['date_besoin'])) ?></div>
                                         </td>
