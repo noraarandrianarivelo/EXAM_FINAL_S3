@@ -54,7 +54,7 @@ class RegionModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO region (nom) VALUES (?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_region (nom) VALUES (?)');
 
         try {
             $STH->execute([$this->getNom()]);
@@ -67,7 +67,7 @@ class RegionModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE region SET nom = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_region SET nom = ? WHERE id = ?');
 
         try {
             $STH->execute([$this->getNom(), $this->getId()]);
@@ -80,7 +80,7 @@ class RegionModel
     public function delete()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('DELETE FROM region WHERE id = ?');
+        $STH = $DBH->prepare('DELETE FROM bngrc_region WHERE id = ?');
 
         try {
             $STH->execute([$this->getId()]);
@@ -93,7 +93,7 @@ class RegionModel
     public function getAll()
     {
         $DBH = $this->db;
-        $STH = $DBH->query('SELECT * FROM region ORDER BY nom');
+        $STH = $DBH->query('SELECT * FROM bngrc_region ORDER BY nom');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
         $resultats = [];
@@ -107,7 +107,7 @@ class RegionModel
     public function getById($id)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT * FROM region WHERE id = ?');
+        $STH = $DBH->prepare('SELECT * FROM bngrc_region WHERE id = ?');
         $STH->execute([$id]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 

@@ -54,7 +54,7 @@ class TypeBesoinModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO type_besoin (nom) VALUES (?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_type_besoin (nom) VALUES (?)');
 
         try {
             $STH->execute([$this->getNom()]);
@@ -67,7 +67,7 @@ class TypeBesoinModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE type_besoin SET nom = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_type_besoin SET nom = ? WHERE id = ?');
 
         try {
             $STH->execute([$this->getNom(), $this->getId()]);
@@ -80,7 +80,7 @@ class TypeBesoinModel
     public function delete()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('DELETE FROM type_besoin WHERE id = ?');
+        $STH = $DBH->prepare('DELETE FROM bngrc_type_besoin WHERE id = ?');
 
         try {
             $STH->execute([$this->getId()]);
@@ -93,7 +93,7 @@ class TypeBesoinModel
     public function getAll()
     {
         $DBH = $this->db;
-        $STH = $DBH->query('SELECT * FROM type_besoin ORDER BY nom');
+        $STH = $DBH->query('SELECT * FROM bngrc_type_besoin ORDER BY nom');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
         $resultats = [];
@@ -107,7 +107,7 @@ class TypeBesoinModel
     public function getById($id)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT * FROM type_besoin WHERE id = ?');
+        $STH = $DBH->prepare('SELECT * FROM bngrc_type_besoin WHERE id = ?');
         $STH->execute([$id]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 

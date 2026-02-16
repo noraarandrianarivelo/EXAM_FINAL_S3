@@ -65,7 +65,7 @@ class VilleModel
     public function save()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('INSERT INTO ville (nom, id_region) VALUES (?, ?)');
+        $STH = $DBH->prepare('INSERT INTO bngrc_ville (nom, id_region) VALUES (?, ?)');
 
         try {
             $STH->execute([$this->getNom(), $this->getIdRegion()]);
@@ -78,7 +78,7 @@ class VilleModel
     public function update()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('UPDATE ville SET nom = ?, id_region = ? WHERE id = ?');
+        $STH = $DBH->prepare('UPDATE bngrc_ville SET nom = ?, id_region = ? WHERE id = ?');
 
         try {
             $STH->execute([$this->getNom(), $this->getIdRegion(), $this->getId()]);
@@ -91,7 +91,7 @@ class VilleModel
     public function delete()
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('DELETE FROM ville WHERE id = ?');
+        $STH = $DBH->prepare('DELETE FROM bngrc_ville WHERE id = ?');
 
         try {
             $STH->execute([$this->getId()]);
@@ -104,8 +104,8 @@ class VilleModel
     public function getAll()
     {
         $DBH = $this->db;
-        $STH = $DBH->query('SELECT v.*, r.nom as nom_region FROM ville v 
-                            INNER JOIN region r ON v.id_region = r.id 
+        $STH = $DBH->query('SELECT v.*, r.nom as nom_region FROM bngrc_ville v 
+                            INNER JOIN bngrc_region r ON v.id_region = r.id 
                             ORDER BY v.nom');
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -120,8 +120,8 @@ class VilleModel
     public function getById($id)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT v.*, r.nom as nom_region FROM ville v 
-                              INNER JOIN region r ON v.id_region = r.id 
+        $STH = $DBH->prepare('SELECT v.*, r.nom as nom_region FROM bngrc_ville v 
+                              INNER JOIN bngrc_region r ON v.id_region = r.id 
                               WHERE v.id = ?');
         $STH->execute([$id]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
@@ -132,7 +132,7 @@ class VilleModel
     public function getByRegion($id_region)
     {
         $DBH = $this->db;
-        $STH = $DBH->prepare('SELECT * FROM ville WHERE id_region = ? ORDER BY nom');
+        $STH = $DBH->prepare('SELECT * FROM bngrc_ville WHERE id_region = ? ORDER BY nom');
         $STH->execute([$id_region]);
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
