@@ -1,71 +1,25 @@
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNGRC - Gestion des Dons</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        ::selection {
-            background: #0d9488;
-            color: white;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        .progress-bar {
-            background: linear-gradient(90deg, #14b8a6, #0d9488, #0f766e);
-            background-size: 200% 100%;
-            animation: shimmer 2s linear infinite;
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+<?php $this->render('partials/header', ['title' => 'BNGRC - Gestion des Dons']); ?>
+<?php $base = Flight::get('flight.base_url'); ?>
+
     <!-- Header Section -->
-    <section class="pt-24 pb-12 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+    <section class="position-relative overflow-hidden" style="padding-top: 7rem; padding-bottom: 2rem;">
+        <div class="blob bg-success" style="width:300px;height:300px;top:-40px;right:-60px;"></div>
+        <div class="container position-relative">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
                 <div>
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 border border-teal-200 rounded-full text-teal-700 text-xs font-semibold uppercase tracking-wider mb-4">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                        </svg>
-                        Gestion des Dons
-                    </div>
-                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3">
-                        📦 Dispatch <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Automatique</span>
+                    <span class="badge bg-teal-light text-teal rounded-pill px-3 py-2 mb-3 text-uppercase fw-bold d-inline-flex align-items-center gap-1" style="font-size:.7rem; letter-spacing: 1px;">
+                        <i class="bi bi-box-seam"></i> Gestion des Dons
+                    </span>
+                    <h1 class="display-5 fw-bold text-dark mb-2">
+                        📦 Dispatch <span class="hero-gradient">Automatique</span>
                     </h1>
-                    <p class="text-lg text-gray-600">
+                    <p class="lead text-muted">
                         Les dons sont automatiquement dispatchés aux besoins ouverts selon l'ordre FIFO
                     </p>
                 </div>
-                <div class="mt-6 md:mt-0">
-                    <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Ajouter un don
+                <div class="mt-3 mt-md-0">
+                    <a href="<?= $base ?>dons/create" class="btn btn-teal rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-plus-lg"></i> Ajouter un don
                     </a>
                 </div>
             </div>
@@ -73,103 +27,90 @@
     </section>
 
     <!-- Content Section -->
-    <section class="pb-16 px-6">
-        <div class="max-w-7xl mx-auto">
+    <section class="pb-5">
+        <div class="container">
             <?php if (empty($dons)): ?>
                 <!-- Empty State -->
-                <div class="glass-card rounded-2xl p-16 text-center shadow-xl">
-                    <div class="w-24 h-24 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                        </svg>
+                <div class="glass-card p-5 text-center">
+                    <div class="bg-teal-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width:80px;height:80px;">
+                        <i class="bi bi-box-seam fs-1 text-teal"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Aucun don disponible</h2>
-                    <p class="text-gray-600 mb-8">Ajoutez votre premier don pour commencer le dispatch automatique</p>
-                    <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Ajouter un don
+                    <h2 class="fs-4 fw-bold text-dark mb-2">Aucun don disponible</h2>
+                    <p class="text-muted mb-4">Ajoutez votre premier don pour commencer le dispatch automatique</p>
+                    <a href="<?= $base ?>dons/create" class="btn btn-teal rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-plus-lg"></i> Ajouter un don
                     </a>
                 </div>
             <?php else: ?>
                 <!-- Dons Table -->
-                <div class="glass-card rounded-2xl shadow-xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
+                <div class="glass-card overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
                             <thead>
-                                <tr class="bg-gradient-to-r from-teal-600 to-teal-700 text-white">
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Catégorie</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Type</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Quantité</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Dispatché</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Reste</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Date</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Action</th>
+                                <tr class="text-white" style="background: linear-gradient(135deg, #0d9488, #0f766e);">
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">ID</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Catégorie</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Type</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Quantité</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Dispatché</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Reste</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Status</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Date</th>
+                                    <th class="px-3 py-3 text-uppercase small fw-semibold" style="letter-spacing:.5px;">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white/50 divide-y divide-gray-200">
+                            <tbody>
                                 <?php foreach ($dons as $don): ?>
-                                    <tr class="hover:bg-white/80 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="font-bold text-gray-900">#<?= htmlspecialchars($don['id']) ?></span>
+                                    <tr>
+                                        <td class="px-3 py-3">
+                                            <span class="fw-bold text-dark">#<?= htmlspecialchars($don['id']) ?></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700">
-                                                <?= htmlspecialchars($don['nom_categorie']) ?>
-                                            </span>
+                                        <td class="px-3 py-3">
+                                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill"><?= htmlspecialchars($don['nom_categorie']) ?></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-3 py-3 text-dark">
                                             <?= htmlspecialchars($don['nom_type_besoin']) ?>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="font-bold text-gray-900"><?= number_format($don['quantite'], 0, ',', ' ') ?></span>
+                                        <td class="px-3 py-3">
+                                            <span class="fw-bold text-dark"><?= number_format($don['quantite'], 0, ',', ' ') ?></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="font-bold text-gray-900"><?= number_format($don['utilise'], 0, ',', ' ') ?></div>
+                                        <td class="px-3 py-3">
+                                            <div class="fw-bold text-dark"><?= number_format($don['utilise'], 0, ',', ' ') ?></div>
                                             <?php if ($don['nb_attributions'] > 0): ?>
-                                                <div class="text-xs text-gray-500">(<?= $don['nb_attributions'] ?> attribution<?= $don['nb_attributions'] > 1 ? 's' : '' ?>)</div>
+                                                <small class="text-muted">(<?= $don['nb_attributions'] ?> attribution<?= $don['nb_attributions'] > 1 ? 's' : '' ?>)</small>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-3 py-3">
                                             <?php if ($don['reste'] > 0): ?>
-                                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                                                    <?= number_format($don['reste'], 0, ',', ' ') ?>
-                                                </span>
+                                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill"><?= number_format($don['reste'], 0, ',', ' ') ?></span>
                                             <?php else: ?>
-                                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">0</span>
+                                                <span class="badge bg-light text-secondary rounded-pill">0</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <?php 
+                                        <td class="px-3 py-3">
+                                            <?php
                                             $pourcentage = $don['quantite'] > 0 ? ($don['utilise'] / $don['quantite']) * 100 : 0;
                                             ?>
-                                            <div class="flex items-center gap-2 mb-1">
+                                            <div class="mb-1">
                                                 <?php if ($pourcentage == 100): ?>
-                                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">✓ Complet</span>
+                                                    <span class="badge bg-success bg-opacity-10 text-success badge-status">✓ Complet</span>
                                                 <?php elseif ($pourcentage > 0): ?>
-                                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700">⏳ Partiel</span>
+                                                    <span class="badge bg-warning bg-opacity-10 text-warning badge-status">⏳ Partiel</span>
                                                 <?php else: ?>
-                                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">✗ Nouveau</span>
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger badge-status">✗ Nouveau</span>
                                                 <?php endif; ?>
                                             </div>
-                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                                <div class="progress-bar h-1.5 rounded-full" style="width: <?= $pourcentage ?>%"></div>
+                                            <div class="progress progress-animated" style="height: 6px; border-radius: 50px;">
+                                                <div class="progress-bar" style="width: <?= $pourcentage ?>%"></div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        <td class="px-3 py-3 text-muted small">
                                             <?= date('d/m/Y', strtotime($don['date_saisie'])) ?><br>
-                                            <span class="text-xs text-gray-400"><?= date('H:i', strtotime($don['date_saisie'])) ?></span>
+                                            <span class="text-muted" style="font-size:.75rem;"><?= date('H:i', strtotime($don['date_saisie'])) ?></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>" class="inline-flex items-center gap-1 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                                </svg>
-                                                Détails
+                                        <td class="px-3 py-3">
+                                            <a href="<?= $base ?>test/dispatch/don/<?= $don['id'] ?>" class="btn btn-sm btn-teal rounded-pill d-inline-flex align-items-center gap-1">
+                                                <i class="bi bi-eye"></i> Détails
                                             </a>
                                         </td>
                                     </tr>
@@ -181,5 +122,5 @@
             <?php endif; ?>
         </div>
     </section>
-</body>
-</html>
+
+<?php $this->render('partials/footer'); ?>

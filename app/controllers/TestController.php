@@ -82,6 +82,100 @@ class TestController
     }
 
     /**
+     * Simule le dispatch sans écrire en BDD et affiche le résultat
+     */
+    public function simuler($id)
+    {
+        $db = $this->app->db();
+        $attributionService = new AttributionService($db);
+        $attributionModel = new AttributionModel($db);
+
+        $result = $attributionService->simulerDispatch($id);
+
+        // Récupérer les attributions existantes pour l'affichage
+        $attributions = $attributionModel->getByDon($id);
+
+        $this->app->render('test/simulation', [
+            'result' => $result,
+            'attributions' => $attributions
+        ]);
+    }
+
+    /**
+     * Valide réellement le dispatch (écrit en BDD) après simulation
+     */
+    public function validerDispatch($id)
+    {
+        $db = $this->app->db();
+        $donModel = new DonModel($db);
+        $besoinModel = new BesoinModel($db);
+        $attributionModel = new AttributionModel($db);
+
+        $don = $donModel->getById($id);
+
+        if (!$don) {
+            $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
+            return;
+        }
+
+        // État AVANT
+        $attributionsAvant = $attributionModel->getByDon($id);
+        $utiliseAvant = 0;
+        foreach ($attributionsAvant as $attr) {
+            $utiliseAvant += $attr['quantite_dispatch'];
+        }
+        $resteAvant = $don['quantite'] - $utiliseAvant;
+        $besoinsAvant = $besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+
+        // EXÉCUTION DU DISPATCH
+        $attributionService = new AttributionService($db);
+        $resultat = $attributionService->dispatcherNouvelleArrivage($id);
+
+        // État APRÈS
+        $attributionsApres = $attributionModel->getByDon($id);
+        $utiliseApres = 0;
+        foreach ($attributionsApres as $attr) {
+            $utiliseApres += $attr['quantite_dispatch'];
+        }
+        $resteApres = $don['quantite'] - $utiliseApres;
+        $besoinsApres = $besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+
+        // Nouvelles attributions créées
+        $nouvellesAttributions = [];
+        foreach ($attributionsApres as $attrApres) {
+            $isNew = true;
+            foreach ($attributionsAvant as $attrAvant) {
+                if ($attrAvant['id'] == $attrApres['id']) {
+                    $isNew = false;
+                    break;
+                }
+            }
+            if ($isNew) {
+                $nouvellesAttributions[] = $attrApres;
+            }
+        }
+
+        $this->app->render('test/result', [
+            'don' => $don,
+            'resultat' => $resultat,
+            'validated' => true,
+            'avant' => [
+                'utilise' => $utiliseAvant,
+                'reste' => $resteAvant,
+                'besoins' => $besoinsAvant,
+                'attributions' => $attributionsAvant
+            ],
+            'apres' => [
+                'utilise' => $utiliseApres,
+                'reste' => $resteApres,
+                'besoins' => $besoinsApres,
+                'attributions' => $attributionsApres
+            ],
+            'nouvelles' => $nouvellesAttributions
+        ]);
+    }
+
+    /**
      * Exécute le dispatch et affiche les résultats
      */
     public function dispatch($id)

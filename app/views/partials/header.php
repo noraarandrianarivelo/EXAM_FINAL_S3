@@ -1,82 +1,96 @@
+<?php $base = Flight::get('flight.base_url'); ?>
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNGRC - Gestion des Dons Humanitaires</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <title><?= $title ?? 'BNGRC - Tableau de Bord' ?></title>
+    <link rel="stylesheet" href="<?= $base ?>assets/bootstrap/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/styles.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                }
-            }
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f5f3 50%, #f1f3f5 100%);
+            min-height: 100vh;
         }
-    </script>
+        ::selection { background: #0d9488; color: white; }
+
+        /* Navbar glass effect */
+        .glass-nav { background: rgba(255,255,255,0.88) !important; backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.6); }
+
+        /* Glass card (stats + villes) */
+        .glass-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.6); border-radius: 1rem; transition: all .3s; }
+        .glass-card:hover { box-shadow: 0 10px 40px rgba(0,0,0,.08); transform: translateY(-2px); }
+
+        /* Teal palette */
+        .text-teal { color: #0d9488 !important; }
+        .bg-teal { background-color: #0d9488 !important; }
+        .bg-teal-light { background-color: rgba(13,148,136,.1) !important; }
+        .border-teal { border-color: #0d9488 !important; }
+        .btn-teal { background: linear-gradient(135deg, #0d9488, #0f766e); color:#fff; border:none; }
+        .btn-teal:hover { background: linear-gradient(135deg, #0f766e, #115e59); color:#fff; transform: translateY(-1px); box-shadow: 0 4px 15px rgba(13,148,136,.35); }
+
+        /* Icon boxes */
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; }
+        .stat-icon-sm { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+
+        /* Animated progress */
+        .progress-animated .progress-bar {
+            background: linear-gradient(90deg, #14b8a6, #0d9488, #0f766e);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Badge styles */
+        .badge-status { font-size: .7rem; font-weight: 600; padding: .35em .75em; border-radius: 50px; }
+
+        /* Besoin item */
+        .besoin-item { background: #fff; border: 1px solid #e9ecef; border-radius: .75rem; padding: 1rem; margin-bottom: .75rem; }
+
+        /* Gradient text */
+        .hero-gradient { color: transparent; background: linear-gradient(135deg, #0d9488, #10b981); -webkit-background-clip: text; background-clip: text; }
+
+        /* Pulse dot */
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+        .pulse-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; animation: pulse-dot 1.5s ease-in-out infinite; }
+
+        /* Decorative blobs */
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .3; pointer-events: none; }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+<body>
     <!-- Navigation -->
-    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 h-20">
-        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+    <nav class="navbar navbar-expand-md fixed-top shadow-sm glass-nav">
+        <div class="container">
             <!-- Logo -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/50 transition-all duration-300">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="<?= $base ?>">
+                <div class="stat-icon bg-teal" style="width:40px;height:40px;font-size:1rem;">
+                    <i class="bi bi-heart-fill"></i>
                 </div>
                 <div>
-                    <span class="text-xl font-bold text-gray-900 tracking-tight">BNGRC</span>
-                    <span class="block text-xs text-gray-500 font-medium -mt-0.5">Gestion des Dons</span>
+                    <span class="fw-bold text-dark d-block lh-1">BNGRC</span>
+                    <small class="text-muted" style="font-size:.65rem;">Gestion des Dons</small>
                 </div>
             </a>
 
-            <!-- Menu Principal -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#" class="text-sm font-semibold text-teal-700 border-b-2 border-teal-500 pb-1">Accueil</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Villes</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Besoins</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dons</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dispatch</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Tableau de bord</a>
-            </div>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            <!-- CTA -->
-            <div class="flex items-center gap-4">
-                <a href="#" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Faire un don
+            <div class="collapse navbar-collapse" id="mainNav">
+                <!-- Menu Principal -->
+                <ul class="navbar-nav mx-auto mb-2 mb-md-0">
+                    <li class="nav-item"><a class="nav-link fw-semibold text-teal border-bottom border-2 border-teal" href="<?= $base ?>">Tableau de bord</a></li>
+                    <li class="nav-item"><a class="nav-link text-secondary" href="<?= $base ?>dons/create">Nouveau Don</a></li>
+                    <li class="nav-item"><a class="nav-link text-secondary" href="<?= $base ?>test/dispatch">Dispatch</a></li>
+                </ul>
+
+                <!-- CTA -->
+                <a href="<?= $base ?>dons/create" class="btn btn-teal btn-sm rounded-pill px-3 d-none d-sm-inline-flex align-items-center gap-1">
+                    <i class="bi bi-plus-lg"></i> Faire un don
                 </a>
-                <!-- Mobile menu button -->
-                <button class="md:hidden p-2 text-gray-600 hover:text-teal-700" id="mobile-menu-btn">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
             </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div class="md:hidden hidden bg-white border-t border-gray-100 py-4 px-6 space-y-3" id="mobile-menu">
-            <a href="#" class="block text-sm font-semibold text-teal-700">Accueil</a>
-            <a href="#" class="block text-sm font-medium text-gray-600">Villes</a>
-            <a href="#" class="block text-sm font-medium text-gray-600">Besoins</a>
-            <a href="#" class="block text-sm font-medium text-gray-600">Dons</a>
-            <a href="#" class="block text-sm font-medium text-gray-600">Dispatch</a>
-            <a href="#" class="block text-sm font-medium text-gray-600">Tableau de bord</a>
-            <a href="#" class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl mt-4">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Faire un don
-            </a>
         </div>
     </nav>

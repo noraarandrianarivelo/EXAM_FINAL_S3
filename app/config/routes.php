@@ -28,6 +28,8 @@ $router->group('', function(Router $router) use ($app) {
 	$router->group('/test', function(Router $router) {
 		$router->get('/dispatch', [ TestController::class, 'index' ]);
 		$router->get('/dispatch/don/@id:[0-9]+', [ TestController::class, 'showDon' ]);
+		$router->post('/dispatch/don/@id:[0-9]+/simuler', [ TestController::class, 'simuler' ]);
+		$router->post('/dispatch/don/@id:[0-9]+/valider', [ TestController::class, 'validerDispatch' ]);
 		$router->post('/dispatch/don/@id:[0-9]+', [ TestController::class, 'dispatch' ]);
 	});
 
