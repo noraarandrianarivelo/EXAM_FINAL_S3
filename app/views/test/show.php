@@ -221,17 +221,43 @@
                 </div>
             <?php endif; ?>
 
-            <!-- Dispatch Button -->
+            <!-- Dispatch Buttons -->
             <?php if ($reste > 0 && !empty($besoins)): ?>
-                <div class="flex justify-center mt-8">
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                    <!-- Bouton Simuler -->
+                    <a href="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>/simuler" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Simuler le dispatch
+                    </a>
+                    
+                    <!-- Bouton Valider -->
                     <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>">
-                        <button type="submit" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                        <button type="submit" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300" onclick="return confirm('Êtes-vous sûr de vouloir valider le dispatch ? Cette action est définitive.');">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            Exécuter le dispatch automatique
+                            Valider le dispatch
                         </button>
                     </form>
+                </div>
+                
+                <!-- Info Box -->
+                <div class="glass-card rounded-xl p-5 mt-6 border-l-4 border-blue-500 bg-blue-50/80">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-blue-900 mb-1">Mode de dispatch</h3>
+                            <p class="text-sm text-blue-800 mb-2">
+                                • <strong>Simuler</strong> : Prévisualise le résultat du dispatch sans enregistrer les données dans la base<br>
+                                • <strong>Valider</strong> : Enregistre définitivement les attributions dans la base de données
+                            </p>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
