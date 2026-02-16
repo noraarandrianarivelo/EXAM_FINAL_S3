@@ -224,4 +224,21 @@ class AttributionModel
 
         return $resultats;
     }
+
+    /**
+     * Calcule la quantité totale attribuée pour un besoin
+     */
+    public function getQuantiteTotaleAttribuee($id_besoin)
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('SELECT COALESCE(SUM(quantite_dispatch), 0) as total FROM bngrc_attribution WHERE id_besoin = ?');
+
+        try {
+            $STH->execute([$id_besoin]);
+            $result = $STH->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors du calcul de la quantité attribuée : " . $e->getMessage());
+        }
+    }
 }
