@@ -54,32 +54,36 @@ Livraison:
 2) 
     creer les modeles [ok]
 
-    creer des donnes de test, pour region, ville, ... pour dons aussi. mais pas pour attribution
+    creer des donnes de test, pour region, ville, ... pour dons aussi. mais pas pour attribution [ok]
 
-    creer la fonction dispatchPourNouvelleArrivage
+    creer la fonction dispatchPourNouvelleArrivage [ok]
     
-    creer tableau de bord: afficher la liste des villes avec leur besoins et les dons deja attribue a chaque ville
+    creer tableau de bord: afficher la liste des villes avec leur besoins et les dons deja attribue a chaque ville [ok]
         - lien : vers ville pour voir la liste des villes
         - besoins : voir la liste des besoins deja envoye par ville
-        - dons : voir la liste des dons recolte
+        - dons : voir la liste des dons recolte [ok]
         - lien pour ajouter un nouveau categorie_besoin
         - lien pour ajouter type_besoin
         - regions
 
 
-    creer les controller et les routes correspondant
+    creer les controller et les routes correspondant [wip]
 
 
 
     creer les pages villes
     creer la page besoin
-    creer la page dons
+    creer la page dons [ok]
     page categorie_besoin
     page type_besoin
     page regions
 
 
     faire marcher ces pages
+
+    =>> V1 deploye
+
+
 
 
 
