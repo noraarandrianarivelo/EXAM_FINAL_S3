@@ -4,14 +4,18 @@ namespace app\controllers;
 
 use flight\Engine;
 use app\models\VilleModel;
+use app\utils\FunctionUtils; // CORRECTION : Importer la bonne classe
 
 class VilleController
 {
     protected Engine $app;
+    protected FunctionUtils $utils; // CORRECTION : Typer correctement la propriété
 
     public function __construct(Engine $app)
     {
         $this->app = $app;
+        // CORRECTION : Instancier FunctionUtils
+        $this->utils = new FunctionUtils($app);
     }
 
     /**
@@ -22,10 +26,11 @@ class VilleController
         $db = $this->app->db();
         $villeModel = new VilleModel($db);
         
-        // Récupère toutes les villes avec le nom de la région (via la jointure du modèle)
+        // Récupère toutes les villes avec le nom de la région
         $villes = $villeModel->getAll();
 
-        $this->app->render('villes/index', ['villes' => $villes]);
+        // Maintenant, cette ligne fonctionnera correctement
+        $this->utils->renderPage('villes/index', ['villes' => $villes]);
     }
 
     /**
@@ -40,7 +45,7 @@ class VilleController
         $stmt->execute();
         $regions = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->app->render('villes/create', ['regions' => $regions]);
+        $this->utils->renderPage('villes/create', ['regions' => $regions]);
     }
 
     /**
