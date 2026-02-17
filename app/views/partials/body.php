@@ -25,17 +25,12 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
     <?php include 'header.php'; ?>
 
-    <!-- C'est ici que s'affiche le contenu de la page appelée par le contrôleur -->
-    <main>
         <?php 
-        // On affiche le contenu passé par le contrôleur
-        // Utilise ?? '' pour éviter une erreur si la variable est vide
         echo $content ?? ''; 
         ?>
-    </main>
 
     <?php include 'footer.php'; ?>
 </body>

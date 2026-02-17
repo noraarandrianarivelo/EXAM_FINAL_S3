@@ -66,7 +66,7 @@ class CategorieBesoinController
         $id_type_besoin = $_POST['id_type_besoin'] ?? null;
 
         if (!$nom || !$pu || !$id_type_besoin) {
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin/create?error=missing');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories/create?error=missing');
             return;
         }
 
@@ -77,9 +77,9 @@ class CategorieBesoinController
 
         try {
             $model->save();
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin?success=created');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories?success=created');
         } catch (\Exception $e) {
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin/create?error=db');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories/create?error=db');
         }
     }
 
@@ -124,9 +124,9 @@ class CategorieBesoinController
 
         try {
             $model->update();
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin?success=updated');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories?success=updated');
         } catch (\Exception $e) {
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin/' . $id . '/edit?error=db');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories/' . $id . '/edit?error=db');
         }
     }
 
@@ -141,9 +141,9 @@ class CategorieBesoinController
 
         try {
             $model->delete();
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin?success=deleted');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories?success=deleted');
         } catch (\Exception $e) {
-            $this->app->redirect($this->app->get('flight.base_url') . 'categoriebesoin?error=delete');
+            $this->app->redirect($this->app->get('flight.base_url') . 'categories?error=delete');
         }
     }
 }
