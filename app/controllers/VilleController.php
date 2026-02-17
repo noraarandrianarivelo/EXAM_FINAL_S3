@@ -30,7 +30,7 @@ class VilleController
         $villes = $villeModel->getAll();
 
         // Maintenant, cette ligne fonctionnera correctement
-        $this->utils->renderPage('villes/index', ['villes' => $villes]);
+        $this->app->render('villes/index', ['villes' => $villes]);
     }
 
     /**
@@ -45,7 +45,7 @@ class VilleController
         $stmt->execute();
         $regions = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->utils->renderPage('villes/create', ['regions' => $regions]);
+        $this->app->render('villes/create', ['regions' => $regions]);
     }
 
     /**

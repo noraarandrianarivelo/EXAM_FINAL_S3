@@ -122,61 +122,6 @@
             </a>
         </div>
     </nav>
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNGRC - Tableau de Bord</title>
-    <!-- Bootstrap CSS -->
-    <link href="/public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS pour glass-card, progress-bar, etc. -->
-    <link href="/public/assets/bootstrap/css/custom.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        ::selection {
-            background: #0d9488;
-            color: white;
-        }
-    </style>
-</head>
-<body class="bg-light min-vh-100">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
-        <div class="container">
-            <a href="<?= Flight::get('flight.base_url') ?>" class="navbar-brand d-flex align-items-center gap-2">
-                <div class="bg-gradient rounded p-2 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
-                    <svg class="text-white" width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                </div>
-                <span class="fw-bold text-dark">BNGRC</span>
-                <span class="small text-muted">Gestion des Dons</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active fw-semibold text-teal" href="<?= Flight::get('flight.base_url') ?>">Tableau de bord</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>recapitulation">Récapitulation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>dons/create">Nouveau Don</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>test/dispatch">Dispatch</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>achats/besoins-achetables">Achats</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>achats">Liste Achats</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>besoins">Besoins</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= Flight::get('flight.base_url') ?>villes">Villes</a></li>
-                </ul>
-                <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="btn btn-success ms-3 d-none d-lg-inline-flex align-items-center gap-2">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Faire un don
-                </a>
-            </div>
-        </div>
-    </nav>
-    <!-- Spacer supprimé pour enlever l'espace sous le header -->
+
+    
+</body>

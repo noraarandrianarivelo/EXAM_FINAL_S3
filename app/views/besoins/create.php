@@ -62,7 +62,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="date_ajout" class="form-label fw-semibold text-gray-700 mb-2">Date d'ajout</label>
-                                <input type="date" class="form-control form-control-lg" id="date_ajout" name="date_ajout" value="<?= date('Y-m-d') ?>" required>
+                                <input type="datetime-local" class="form-control form-control-lg" id="date_ajout" name="date_ajout" value="<?= date('Y-m-d\TH:i') ?>" required>
                             </div>
                         </div>
 

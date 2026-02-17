@@ -1,5 +1,5 @@
 -- =========================
--- DONNEES INITIALES POUR REINITIALISATION
+-- DONNEES DE TEST INITIALES POUR REINITIALISATION
 -- =========================
 USE BNGRC;
 

@@ -578,17 +578,28 @@ public function simulerTousLesDonsProportionnel()
         $besoins = $this->besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
         if (empty($besoins)) continue;
 
+        // Filtrer les besoins qui ont encore un reste > 0
+        $besoinsActifs = array_filter($besoins, function($b) {
+            return $b['reste'] > 0;
+        });
+        
+        if (empty($besoinsActifs)) continue;
+
         // Total des besoins restants
-        $totalBesoin = array_sum(array_column($besoins, 'reste'));
+        $totalBesoin = array_sum(array_column($besoinsActifs, 'reste'));
         if ($totalBesoin <= 0) continue;
 
         $simulatedAttributions = [];
         $restesDecimaux = [];
 
         // Étape 1 : distribution proportionnelle arrondi vers le bas
-        foreach ($besoins as $besoin) {
+        foreach ($besoinsActifs as $besoin) {
             $partReelle = ($besoin['reste'] / $totalBesoin) * $resteDon;
             $quantite = floor($partReelle);
+            
+            // S'assurer de ne pas dépasser le besoin restant
+            $quantite = min($quantite, $besoin['reste']);
+            
             $simulatedAttributions[] = [
                 'id_besoin' => $besoin['id'],
                 'id_don' => $don['id'],
@@ -609,23 +620,48 @@ public function simulerTousLesDonsProportionnel()
 
         if ($reste > 0) {
             arsort($restesDecimaux);
-            $ids = array_keys($restesDecimaux);
-            $i = 0;
-            while ($reste > 0) {
-                $id = $ids[$i % count($ids)];
-                foreach ($simulatedAttributions as &$attr) {
-                    if ($attr['id_besoin'] == $id) {
-                        $attr['quantite_dispatch'] += 1;
-                        $attr['reste_besoin_après'] -= 1;
-                        $reste--;
-                        break;
+            
+            // Ne garder que les besoins qui ont encore du reste disponible
+            $besoinsAvecReste = array_filter($simulatedAttributions, function($attr) {
+                return $attr['reste_besoin_après'] > 0;
+            });
+            
+            if (!empty($besoinsAvecReste)) {
+                $idsAvecReste = array_column($besoinsAvecReste, 'id_besoin');
+                $i = 0;
+                
+                while ($reste > 0 && !empty($idsAvecReste)) {
+                    $id = $idsAvecReste[$i % count($idsAvecReste)];
+                    
+                    foreach ($simulatedAttributions as &$attr) {
+                        if ($attr['id_besoin'] == $id && $attr['reste_besoin_après'] > 0) {
+                            $attr['quantite_dispatch'] += 1;
+                            $attr['reste_besoin_après'] -= 1;
+                            $reste--;
+                            
+                            // Si ce besoin est maintenant satisfait, le retirer de la liste
+                            if ($attr['reste_besoin_après'] <= 0) {
+                                $idsAvecReste = array_values(array_diff($idsAvecReste, [$id]));
+                            }
+                            break;
+                        }
+                    }
+                    
+                    if (!empty($idsAvecReste)) {
+                        $i++;
                     }
                 }
-                $i++;
             }
         }
 
+        // Filtrer les attributions avec quantité > 0
+        $simulatedAttributions = array_filter($simulatedAttributions, function($attr) {
+            return $attr['quantite_dispatch'] > 0;
+        });
+
         if (!empty($simulatedAttributions)) {
+            $quantiteDispatchee = array_sum(array_column($simulatedAttributions, 'quantite_dispatch'));
+            
             $resultats[] = [
                 'don' => $don,
                 'simulation' => [
@@ -633,16 +669,16 @@ public function simulerTousLesDonsProportionnel()
                     'quantite_totale' => $don['quantite'],
                     'quantite_deja_utilisee' => $utilise,
                     'quantite_disponible' => $resteDon,
-                    'quantite_dispatched' => $resteDon - max($reste, 0),
-                    'quantite_restante' => max($reste, 0),
+                    'quantite_dispatched' => $quantiteDispatchee,
+                    'quantite_restante' => $resteDon - $quantiteDispatchee,
                     'nb_besoins_couverts' => count($simulatedAttributions),
-                    'attributions' => $simulatedAttributions
+                    'attributions' => array_values($simulatedAttributions)
                 ]
             ];
 
             $totalSimulations++;
             $totalBesoinsCouverts += count($simulatedAttributions);
-            $totalQuantiteDispatchee += ($resteDon - max($reste, 0));
+            $totalQuantiteDispatchee += $quantiteDispatchee;
         }
     }
 
@@ -682,17 +718,27 @@ public function dispatcherTousLesDonsProportionnel()
         $besoins = $this->besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
         if (empty($besoins)) continue;
 
+        // Filtrer les besoins qui ont encore un reste > 0
+        $besoinsActifs = array_filter($besoins, function($b) {
+            return $b['reste'] > 0;
+        });
+        
+        if (empty($besoinsActifs)) continue;
+
         // Calcul total des besoins restants
-        $totalBesoin = array_sum(array_column($besoins, 'reste'));
+        $totalBesoin = array_sum(array_column($besoinsActifs, 'reste'));
         if ($totalBesoin <= 0) continue;
 
         $simulatedAttributions = [];
         $restesDecimaux = [];
 
         // Étape 1 : répartition proportionnelle arrondi vers le bas
-        foreach ($besoins as $besoin) {
+        foreach ($besoinsActifs as $besoin) {
             $partReelle = ($besoin['reste'] / $totalBesoin) * $resteDon;
             $quantite = floor($partReelle);
+            
+            // S'assurer de ne pas dépasser le besoin restant
+            $quantite = min($quantite, $besoin['reste']);
 
             if ($quantite > 0) {
                 $attribution = new \app\models\AttributionModel($this->db);
@@ -723,28 +769,82 @@ public function dispatcherTousLesDonsProportionnel()
         $totalDistribue = array_sum(array_column($simulatedAttributions, 'quantite_dispatch'));
         $reste = $resteDon - $totalDistribue;
 
-        if ($reste > 0) {
+        if ($reste > 0 && !empty($simulatedAttributions)) {
             arsort($restesDecimaux);
-            $ids = array_keys($restesDecimaux);
-            $i = 0;
-            while ($reste > 0) {
-                $id = $ids[$i % count($ids)];
-                foreach ($simulatedAttributions as &$attr) {
-                    if ($attr['id_besoin'] == $id) {
-                        $attr['quantite_dispatch'] += 1;
-                        $attr['reste_besoin_apres'] -= 1;
-                        $reste--;
-                        break;
+            
+            // Récupérer les besoins qui ont encore du reste disponible
+            $besoinsAvecReste = [];
+            foreach ($simulatedAttributions as $attr) {
+                $besoin = current(array_filter($besoinsActifs, function($b) use ($attr) {
+                    return $b['id'] == $attr['id_besoin'];
+                }));
+                
+                if ($besoin && ($besoin['reste'] - $attr['quantite_dispatch']) > 0) {
+                    $besoinsAvecReste[] = $attr['id_besoin'];
+                }
+            }
+            
+            if (!empty($besoinsAvecReste)) {
+                $i = 0;
+                while ($reste > 0 && !empty($besoinsAvecReste)) {
+                    $id = $besoinsAvecReste[$i % count($besoinsAvecReste)];
+                    
+                    foreach ($simulatedAttributions as &$attr) {
+                        if ($attr['id_besoin'] == $id) {
+                            // Vérifier le reste réel du besoin
+                            $besoinReel = current(array_filter($besoinsActifs, function($b) use ($id) {
+                                return $b['id'] == $id;
+                            }));
+                            
+                            if ($besoinReel && ($besoinReel['reste'] - ($attr['quantite_dispatch'] + 1)) >= 0) {
+                                // Mettre à jour l'attribution
+                                $attr['quantite_dispatch'] += 1;
+                                $attr['reste_besoin_apres'] -= 1;
+                                
+                                // Mettre à jour en base de données
+                                $this->db->query(
+                                    "UPDATE attribution 
+                                     SET quantite_dispatch = quantite_dispatch + 1 
+                                     WHERE id_besoin = ? AND id_don = ? 
+                                     ORDER BY id DESC LIMIT 1",
+                                     [$id, $don['id']]
+                                );
+                                
+                                $reste--;
+                            } else {
+                                // Retirer ce besoin de la liste s'il est satisfait
+                                $besoinsAvecReste = array_values(array_diff($besoinsAvecReste, [$id]));
+                                if (!empty($besoinsAvecReste)) {
+                                    $i = 0;
+                                    continue 2;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    
+                    if (!empty($besoinsAvecReste)) {
+                        $i++;
                     }
                 }
-                $i++;
             }
         }
 
         // Récupérer toutes les attributions après dispatch
         $attributionsApres = $this->attributionModel->getByDon($don['id']);
         $apresDispatch = array_sum(array_column($attributionsApres, 'quantite_dispatch'));
-        $nbNouvellesAttributions = count($attributionsApres) - count($attributionsAvant);
+        
+        // Calculer le nombre de nouvelles attributions
+        $nouvellesAttributions = array_filter($attributionsApres, function($attr) use ($attributionsAvant) {
+            foreach ($attributionsAvant as $avant) {
+                if ($avant['id_besoin'] == $attr['id_besoin'] && $avant['quantite_dispatch'] == $attr['quantite_dispatch']) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        
+        $nbNouvellesAttributions = count($nouvellesAttributions);
 
         if ($nbNouvellesAttributions > 0) {
             $resultats[] = [
@@ -753,7 +853,7 @@ public function dispatcherTousLesDonsProportionnel()
                 'apres' => $apresDispatch,
                 'dispatche' => $apresDispatch - $avantDispatch,
                 'nb_attributions' => $nbNouvellesAttributions,
-                'nouvelles_attributions' => array_slice($attributionsApres, -$nbNouvellesAttributions)
+                'nouvelles_attributions' => array_values($nouvellesAttributions)
             ];
 
             $totalDispatchs++;
