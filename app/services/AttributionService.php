@@ -8,7 +8,8 @@ use app\models\BesoinModel;
 use PDO;
 use PDOException;
 
-class AttributionService {
+class AttributionService
+{
 
     private $db;
     private DonModel $donModel;
@@ -24,7 +25,7 @@ class AttributionService {
     }
 
 
-    public function dispatcherNouvelleArrivage($idDon) 
+    public function dispatcherNouvelleArrivage($idDon)
     {
         // =============================
         // Récupérer le don
@@ -72,7 +73,7 @@ class AttributionService {
             $attribution->setIdDon($idDon);
             $attribution->setQuantiteDispatch($quantiteADispatcher);
             $attribution->setDateDispatch(date('Y-m-d H:i:s'));
-            
+
             try {
                 $attribution->save();
                 $resteDon -= $quantiteADispatcher;
@@ -89,7 +90,7 @@ class AttributionService {
      * Simule le dispatch sans enregistrer dans la base de données
      * Retourne un tableau avec les attributions qui seraient créées
      */
-    public function simulerDispatch($idDon) 
+    public function simulerDispatch($idDon)
     {
         // =============================
         // Récupérer le don
@@ -183,12 +184,12 @@ class AttributionService {
     {
         // Récupérer tous les dons
         $dons = $this->donModel->getAll();
-        
+
         $resultats = [];
         $totalSimulations = 0;
         $totalBesoinsCouverts = 0;
         $totalQuantiteDispatchee = 0;
-        
+
         foreach ($dons as $don) {
             // Calculer la quantité déjà utilisée
             $attributions = $this->attributionModel->getByDon($don['id']);
@@ -196,13 +197,13 @@ class AttributionService {
             foreach ($attributions as $attr) {
                 $utilise += $attr['quantite_dispatch'];
             }
-            
+
             $reste = $don['quantite'] - $utilise;
-            
+
             // Simuler seulement si du reste disponible
             if ($reste > 0) {
                 $simulation = $this->simulerDispatch($don['id']);
-                
+
                 if ($simulation['success']) {
                     $resultats[] = [
                         'don' => $don,
@@ -214,7 +215,7 @@ class AttributionService {
                 }
             }
         }
-        
+
         return [
             'success' => !empty($resultats),
             'nb_dons_a_dispatcher' => $totalSimulations,
@@ -223,7 +224,79 @@ class AttributionService {
             'resultats' => $resultats
         ];
     }
-    
+
+    /**
+     * Simule le dispatch de TOUS les dons en priorisant les besoins du plus petit au plus grand
+     */
+    public function simulerTousLesDonsBesoinCroissant()
+    {
+        $dons = $this->donModel->getAll();
+        $resultats = [];
+        $totalSimulations = 0;
+        $totalBesoinsCouverts = 0;
+        $totalQuantiteDispatchee = 0;
+        foreach ($dons as $don) {
+            $attributions = $this->attributionModel->getByDon($don['id']);
+            $utilise = 0;
+            foreach ($attributions as $attr) {
+                $utilise += $attr['quantite_dispatch'];
+            }
+            $reste = $don['quantite'] - $utilise;
+            if ($reste > 0) {
+                // Récupérer tous les besoins ouverts de la même catégorie, triés par quantité croissante
+                $besoins = $this->besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+                usort($besoins, function ($a, $b) {
+                    return $a['reste'] <=> $b['reste'];
+                });
+                $simulatedAttributions = [];
+                $resteDonSimule = $reste;
+                foreach ($besoins as $besoin) {
+                    if ($resteDonSimule <= 0) break;
+                    $quantiteADispatcher = min($resteDonSimule, $besoin['reste']);
+                    if ($quantiteADispatcher > 0) {
+                        $simulatedAttributions[] = [
+                            'id_besoin' => $besoin['id'],
+                            'id_don' => $don['id'],
+                            'quantite_dispatch' => $quantiteADispatcher,
+                            'date_dispatch' => date('Y-m-d H:i:s'),
+                            'ville' => $besoin['nom_ville'] ?? '',
+                            'region' => $besoin['nom_region'] ?? '',
+                            'quantite_besoin' => $besoin['quantite'],
+                            'reste_besoin_avant' => $besoin['reste'],
+                            'reste_besoin_après' => $besoin['reste'] - $quantiteADispatcher
+                        ];
+                        $resteDonSimule -= $quantiteADispatcher;
+                    }
+                }
+                if (!empty($simulatedAttributions)) {
+                    $resultats[] = [
+                        'don' => $don,
+                        'simulation' => [
+                            'success' => true,
+                            'quantite_totale' => $don['quantite'],
+                            'quantite_deja_utilisee' => $utilise,
+                            'quantite_disponible' => $reste,
+                            'quantite_dispatched' => $reste - $resteDonSimule,
+                            'quantite_restante' => $resteDonSimule,
+                            'nb_besoins_couverts' => count($simulatedAttributions),
+                            'attributions' => $simulatedAttributions
+                        ]
+                    ];
+                    $totalSimulations++;
+                    $totalBesoinsCouverts += count($simulatedAttributions);
+                    $totalQuantiteDispatchee += ($reste - $resteDonSimule);
+                }
+            }
+        }
+        return [
+            'success' => !empty($resultats),
+            'nb_dons_a_dispatcher' => $totalSimulations,
+            'nb_besoins_couverts' => $totalBesoinsCouverts,
+            'quantite_totale_dispatchee' => $totalQuantiteDispatchee,
+            'resultats' => $resultats
+        ];
+    }
+
     /**
      * Dispatch réel de TOUS les dons avec quantité disponible
      */
@@ -231,12 +304,12 @@ class AttributionService {
     {
         // Récupérer tous les dons
         $dons = $this->donModel->getAll();
-        
+
         $resultats = [];
         $totalDispatchs = 0;
         $totalBesoinsCouverts = 0;
         $totalAttributions = 0;
-        
+
         foreach ($dons as $don) {
             // Calculer la quantité déjà utilisée
             $attributions = $this->attributionModel->getByDon($don['id']);
@@ -244,14 +317,14 @@ class AttributionService {
             foreach ($attributions as $attr) {
                 $utilise += $attr['quantite_dispatch'];
             }
-            
+
             $reste = $don['quantite'] - $utilise;
             $avantDispatch = $utilise;
-            
+
             // Dispatcher seulement si du reste disponible
             if ($reste > 0) {
                 $success = $this->dispatcherNouvelleArrivage($don['id']);
-                
+
                 if ($success) {
                     // Récupérer les nouvelles attributions
                     $nouvellesAttributions = $this->attributionModel->getByDon($don['id']);
@@ -259,10 +332,10 @@ class AttributionService {
                     foreach ($nouvellesAttributions as $attr) {
                         $apresDispatch += $attr['quantite_dispatch'];
                     }
-                    
+
                     $quantiteDispatchee = $apresDispatch - $avantDispatch;
                     $nbNouvellesAttributions = count($nouvellesAttributions) - count($attributions);
-                    
+
                     $resultats[] = [
                         'don' => $don,
                         'avant' => $avantDispatch,
@@ -271,14 +344,110 @@ class AttributionService {
                         'nb_attributions' => $nbNouvellesAttributions,
                         'nouvelles_attributions' => array_slice($nouvellesAttributions, -$nbNouvellesAttributions)
                     ];
-                    
+
                     $totalDispatchs++;
                     $totalBesoinsCouverts += $nbNouvellesAttributions;
                     $totalAttributions += $nbNouvellesAttributions;
                 }
             }
         }
-        
+
+        return [
+            'success' => !empty($resultats),
+            'nb_dons_dispatches' => $totalDispatchs,
+            'nb_besoins_couverts' => $totalBesoinsCouverts,
+            'nb_attributions' => $totalAttributions,
+            'resultats' => $resultats
+        ];
+    }
+
+
+    /**
+     * Dispatch réel de TOUS les dons en priorisant les besoins du plus petit au plus grand
+     */
+    public function dispatcherTousLesDonsBesoinCroissant()
+    {
+        $dons = $this->donModel->getAll();
+
+        $resultats = [];
+        $totalDispatchs = 0;
+        $totalBesoinsCouverts = 0;
+        $totalAttributions = 0;
+
+        foreach ($dons as $don) {
+
+            // Quantité déjà utilisée
+            $attributionsAvant = $this->attributionModel->getByDon($don['id']);
+            $utilise = 0;
+            foreach ($attributionsAvant as $attr) {
+                $utilise += $attr['quantite_dispatch'];
+            }
+
+            $reste = $don['quantite'] - $utilise;
+            $avantDispatch = $utilise;
+
+            if ($reste > 0) {
+
+                // Besoins ouverts même catégorie
+                $besoins = $this->besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+
+                // Tri croissant sur le reste
+                usort($besoins, function ($a, $b) {
+                    return $a['reste'] <=> $b['reste'];
+                });
+
+                foreach ($besoins as $besoin) {
+
+                    if ($reste <= 0) break;
+
+                    $quantiteADispatcher = min($reste, $besoin['reste']);
+
+                    if ($quantiteADispatcher > 0) {
+
+                        $attribution = new \app\models\AttributionModel($this->db);
+                        $attribution->setIdBesoin($besoin['id']);
+                        $attribution->setIdDon($don['id']);
+                        $attribution->setQuantiteDispatch($quantiteADispatcher);
+                        $attribution->setDateDispatch(date('Y-m-d H:i:s'));
+
+                        try {
+                            $attribution->save();
+                            $reste -= $quantiteADispatcher;
+                        } catch (\PDOException $e) {
+                            error_log("Erreur dispatch croissant : " . $e->getMessage());
+                        }
+                    }
+                }
+
+                // Récupérer les nouvelles attributions
+                $attributionsApres = $this->attributionModel->getByDon($don['id']);
+
+                $apresDispatch = 0;
+                foreach ($attributionsApres as $attr) {
+                    $apresDispatch += $attr['quantite_dispatch'];
+                }
+
+                $quantiteDispatchee = $apresDispatch - $avantDispatch;
+                $nbNouvellesAttributions = count($attributionsApres) - count($attributionsAvant);
+
+                if ($nbNouvellesAttributions > 0) {
+
+                    $resultats[] = [
+                        'don' => $don,
+                        'avant' => $avantDispatch,
+                        'apres' => $apresDispatch,
+                        'dispatche' => $quantiteDispatchee,
+                        'nb_attributions' => $nbNouvellesAttributions,
+                        'nouvelles_attributions' => array_slice($attributionsApres, -$nbNouvellesAttributions)
+                    ];
+
+                    $totalDispatchs++;
+                    $totalBesoinsCouverts += $nbNouvellesAttributions;
+                    $totalAttributions += $nbNouvellesAttributions;
+                }
+            }
+        }
+
         return [
             'success' => !empty($resultats),
             'nb_dons_dispatches' => $totalDispatchs,
@@ -288,4 +457,3 @@ class AttributionService {
         ];
     }
 }
-

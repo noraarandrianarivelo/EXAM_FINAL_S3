@@ -43,6 +43,8 @@ $router->group('', function(Router $router) use ($app) {
 		// Routes pour dispatch GÉNÉRAL (tous les dons)
 		$router->get('/dispatch/simuler-tout', [ TestController::class, 'simulerTout' ]);
 		$router->post('/dispatch/valider-tout', [ TestController::class, 'dispatcherTout' ]);
+		$router->post('/dispatch/valider-tout-croissant', [ TestController::class, 'dispatcherToutCroissant' ]);
+		$router->get('/dispatch/simuler-tout-croissant', [ TestController::class, 'simulerToutCroissant' ]);
 	});
 
 	// Routes pour les achats

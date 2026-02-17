@@ -233,4 +233,31 @@ class TestController
             'resultat' => $resultat
         ]);
     }
+
+    /**
+     * Exécute le dispatch réel de TOUS les dons (Besoins du plus petit au plus grand)
+     */
+public function dispatcherToutCroissant()
+{
+    $db = $this->app->db();
+    $attributionService = new \app\services\AttributionService($db);
+
+    // Dispatch réel croissant
+    $resultat = $attributionService->dispatcherTousLesDonsBesoinCroissant();
+
+    $this->app->render('test/result-tout-croissant', [
+        'resultat' => $resultat
+    ]);
+}
+
+
+    public function simulerToutCroissant()
+    {
+        $db = $this->app->db();
+        $attributionService = new \app\services\AttributionService($db);
+        $resultat = $attributionService->simulerTousLesDonsBesoinCroissant();
+        $this->app->render('test/simulation-tout-croissant', [
+            'resultat' => $resultat
+        ]);
+    }
 }

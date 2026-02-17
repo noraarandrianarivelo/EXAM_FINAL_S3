@@ -36,8 +36,67 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
                             <div>
-                                <h3 class="font-bold text-gray-900 text-lg mb-1">Dispatch Général</h3>
-                                <p class="text-sm text-gray-600">Dispatcher automatiquement TOUS les dons avec quantité disponible en une seule opération</p>
+                                <h3 class="font-bold text-gray-900 text-lg mb-1">Dispatch selon date</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch/simuler-tout" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Simuler tout
+                            </a>
+                            <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/valider-tout" class="inline">
+                                <button type="submit" onclick="return confirm('⚠️ Confirmer le dispatch de TOUS les dons disponibles ?');" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Valider tout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 mb-8 border-l-4 border-purple-500">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-lg mb-1">Dispatch du plus petit au plus grand</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch/simuler-tout-croissant" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Simuler tout
+                            </a>
+                            <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/valider-tout-croissant" class="inline">
+                                <button type="submit" onclick="return confirm('⚠️ Confirmer le dispatch de TOUS les dons disponibles ?');" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Valider tout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 mb-8 border-l-4 border-purple-500">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-lg mb-1">Dispatch proportionnelle</h3>
                             </div>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-3">
