@@ -22,11 +22,11 @@ $router->group('', function (Router $router) use ($app) {
 	$router->get('/', [DashboardController::class, 'showDashboard']);
 
 	// Routes pour la récapitulation
-	$router->get('/recapitulation', [ DashboardController::class, 'recapitulation' ]);
-	$router->get('/api/stats-recapitulation', [ DashboardController::class, 'getStatsRecapitulation' ]);
-	
+	$router->get('/recapitulation', [DashboardController::class, 'recapitulation']);
+	$router->get('/api/stats-recapitulation', [DashboardController::class, 'getStatsRecapitulation']);
+
 	// Route pour réinitialiser les données
-	$router->post('/admin/reset', [ DashboardController::class, 'resetData' ]);
+	$router->post('/admin/reset', [DashboardController::class, 'resetData']);
 
 	// Routes pour les dons (sans dispatch automatique)
 	$router->group('/dons', function (Router $router) {
@@ -42,10 +42,12 @@ $router->group('', function (Router $router) use ($app) {
 		$router->post('/dispatch/don/@id:[0-9]+', [TestController::class, 'dispatch']);
 
 		// Routes pour dispatch GÉNÉRAL (tous les dons)
-		$router->get('/dispatch/simuler-tout', [ TestController::class, 'simulerTout' ]);
-		$router->post('/dispatch/valider-tout', [ TestController::class, 'dispatcherTout' ]);
-		$router->post('/dispatch/valider-tout-croissant', [ TestController::class, 'dispatcherToutCroissant' ]);
-		$router->get('/dispatch/simuler-tout-croissant', [ TestController::class, 'simulerToutCroissant' ]);
+		$router->get('/dispatch/simuler-tout', [TestController::class, 'simulerTout']);
+		$router->post('/dispatch/valider-tout', [TestController::class, 'dispatcherTout']);
+		$router->post('/dispatch/valider-tout-croissant', [TestController::class, 'dispatcherToutCroissant']);
+		$router->get('/dispatch/simuler-tout-croissant', [TestController::class, 'simulerToutCroissant']);
+		$router->get('/dispatch/simuler-tout-proportionnel', [TestController::class, 'simulerToutProportionnel']);
+		$router->post('/dispatch/valider-tout-proportionnel', [TestController::class, 'dispatcherToutProportionnel']);
 	});
 
 	// Routes pour les achats
