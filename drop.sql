@@ -8,6 +8,8 @@ USE BNGRC;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS bngrc_attribution;
+DROP TABLE IF EXISTS bngrc_achat;
+DROP TABLE IF EXISTS bngrc_configuration;
 DROP TABLE IF EXISTS bngrc_don;
 DROP TABLE IF EXISTS bngrc_besoin;
 DROP TABLE IF EXISTS bngrc_categorie_besoin;

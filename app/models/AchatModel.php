@@ -303,7 +303,7 @@ class AchatModel
                 INNER JOIN bngrc_ville v ON b.id_ville = v.id
                 LEFT JOIN bngrc_attribution a ON b.id = a.id_besoin
                 LEFT JOIN bngrc_achat ac ON b.id = ac.id_besoin
-                WHERE tb.nom IN ("Nature", "Matériaux")';
+                WHERE tb.nom IN ("Nature", "Materiel")';
         
         if ($id_ville) {
             $sql .= ' AND v.id = ?';

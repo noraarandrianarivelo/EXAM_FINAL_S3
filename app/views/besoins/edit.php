@@ -49,12 +49,8 @@
                                 <input type="number" name="quantite" value="<?= $besoin['quantite'] ?>" class="form-control form-control-lg" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold text-gray-700 mb-2">Prix Unitaire</label>
-                                <input type="number" step="0.01" name="prix_unitaire" value="<?= $besoin['pu'] ?>" class="form-control form-control-lg" required>
-                            </div>
-                            <div class="col-md-4">
                                 <label class="form-label fw-semibold text-gray-700 mb-2">Date</label>
-                                <input type="date" name="date_ajout" value="<?= $besoin['date_besoin'] ?>" class="form-control form-control-lg" required>
+                                <input type="datetime-local" name="date_ajout" value="<?= date('Y-m-d\TH:i', strtotime($besoin['date_besoin'])) ?>" class="form-control form-control-lg" required>
                             </div>
                         </div>
 
