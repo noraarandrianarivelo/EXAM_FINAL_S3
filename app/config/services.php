@@ -80,7 +80,7 @@ if (Debugger::$showBar === true && php_sapi_name() !== 'cli') {
 // Uncomment and configure the following for your database:
 
 // PGSQL Example:
-$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' .$config['database']['port']. ';dbname=' . $config['database']['dbname'];
+$dsn = 'mysql:host=' . $config['database']['host'] . ';port=' .$config['database']['port']. ';dbname=' . $config['database']['dbname'];
 
 // SQLite Example:
 // $dsn = 'sqlite:' . $config['database']['file_path'];
