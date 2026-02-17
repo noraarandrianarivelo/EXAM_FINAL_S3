@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNGRC - Résultat Dispatch</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        ::selection {
-            background: #0d9488;
-            color: white;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+<?php include dirname(__DIR__) . '/partition/header.php'; ?>
     <section class="py-12 px-6">
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
@@ -242,5 +208,6 @@
             </div>
         </div>
     </section>
+    <?php include dirname(__DIR__) . '/partition/footer.php'; ?>
 </body>
 </html>
