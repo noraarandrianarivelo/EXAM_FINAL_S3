@@ -167,7 +167,7 @@
                         </svg>
                         Annuler
                     </a>
-                    <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/valider-tout">
+                    <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/valider-tout-croissant" class="inline">
                         <button type="submit" onclick="return confirm('⚠️ Confirmer le dispatch de <?= $resultat['nb_dons_a_dispatcher'] ?> don(s) vers <?= $resultat['nb_besoins_couverts'] ?> besoin(s) ?');" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>

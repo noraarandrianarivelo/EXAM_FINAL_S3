@@ -357,4 +357,17 @@ class AchatModel
             throw new PDOException("Erreur lors de la récupération de l'argent disponible : " . $e->getMessage());
         }
     }
+
+    public function deleteAll()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('DELETE FROM bngrc_achat');
+
+        try {
+            $STH->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de la réinitialisation des achats : " . $e->getMessage());
+        }
+    }
 }

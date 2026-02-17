@@ -1,13 +1,21 @@
-<!-- Section Formulaire -->
-<section class="pt-32 pb-16 px-6 relative">
-    <div class="max-w-7xl mx-auto">
+<?php include dirname(__DIR__) . '/partition/header.php'; ?>
 
-        <div class="text-center max-w-3xl mx-auto mb-12">
-            <span class="text-xs font-bold uppercase tracking-widest text-teal-600 mb-2 block">Administration</span>
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Ajouter une ville</h2>
-            <p class="text-lg text-gray-600 leading-relaxed mt-4">
-                Renseignez le nom de la ville et sa région d'appartenance.
-            </p>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 h-20" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226, 232, 240, 0.5);">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="<?= Flight::get('flight.base_url') ?>" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <span class="text-xl font-bold text-gray-900">BNGRC</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="<?= Flight::get('flight.base_url') ?>" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Tableau de bord</a>
+                <a href="<?= Flight::get('flight.base_url') ?>villes" class="text-sm font-semibold text-teal-700 border-b-2 border-teal-500 pb-1">Villes</a>
+            </div>
         </div>
 
         <!-- Carte Formulaire -->
@@ -56,5 +64,10 @@
                 </form>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <!-- Bootstrap Local JS -->
+    <script src="<?= Flight::get('flight.base_url') ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php include dirname(__DIR__) . '/partition/footer.php'; ?>
+</body>
+</html>

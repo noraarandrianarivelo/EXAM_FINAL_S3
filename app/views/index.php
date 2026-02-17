@@ -1,129 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNGRC - Tableau de Bord</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        ::selection {
-            background: #0d9488;
-            color: white;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1 px solid rgba(255, 255, 255, 0.6);
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .float-animation {
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
-        }
-        .progress-bar {
-            background: linear-gradient(90deg, #14b8a6, #0d9488, #0f766e);
-            background-size: 200% 100%;
-            animation: shimmer 2s linear infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
-    <!-- Navigation -->
-    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 h-20">
-        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-            <!-- Logo -->
-            <a href="<?= Flight::get('flight.base_url') ?>" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/50 transition-all duration-300">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <span class="text-xl font-bold text-gray-900 tracking-tight">BNGRC</span>
-                    <span class="block text-xs text-gray-500 font-medium -mt-0.5">Gestion des Dons</span>
-                </div>
-            </a>
-
-            <!-- Menu Principal -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="<?= Flight::get('flight.base_url') ?>" class="text-sm font-semibold text-teal-700 border-b-2 border-teal-500 pb-1">Tableau de bord</a>
-                <a href="<?= Flight::get('flight.base_url') ?>recapitulation" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Récapitulation</a>
-                <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Nouveau Don</a>
-                <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Dispatch</a>
-                <a href="<?= Flight::get('flight.base_url') ?>achats/besoins-achetables" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Achats</a>
-                <a href="<?= Flight::get('flight.base_url') ?>achats" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Liste Achats</a>
-                <a href="<?= Flight::get('flight.base_url') ?>besoins" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Besoins</a>
-                <a href="<?= Flight::get('flight.base_url') ?>villes" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">Villes</a>
-            </div>
-
-            <!-- CTA -->
-            <div class="flex items-center gap-4">
-                <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Faire un don
-                </a>
-                <!-- Mobile menu button -->
-                <button class="md:hidden p-2 text-gray-600 hover:text-teal-700" id="mobile-menu-btn">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div class="md:hidden hidden bg-white border-t border-gray-100 py-4 px-6 space-y-3" id="mobile-menu">
-            <a href="<?= Flight::get('flight.base_url') ?>" class="block text-sm font-semibold text-teal-700">Tableau de bord</a>
-            <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="block text-sm font-medium text-gray-600">Nouveau Don</a>
-            <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="block text-sm font-medium text-gray-600">Dispatch</a>
-            <a href="<?= Flight::get('flight.base_url') ?>achats/besoins-achetables" class="block text-sm font-medium text-gray-600">Achats</a>
-            <a href="<?= Flight::get('flight.base_url') ?>achats" class="block text-sm font-medium text-gray-600">Liste Achats</a>
-            <a href="<?= Flight::get('flight.base_url') ?>besoins" class="block text-sm font-medium text-gray-600">Besoins</a>
-            <a href="<?= Flight::get('flight.base_url') ?>villes" class="block text-sm font-medium text-gray-600">Villes</a>
-            <a href="<?= Flight::get('flight.base_url') ?>dons/create" class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl mt-4">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Faire un don
-            </a>
-        </div>
-    </nav>
+<?php include __DIR__ . '/partition/header.php'; ?>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-16 px-6 relative overflow-hidden">
+    <section class="pt-16 pb-16 px-6 relative overflow-hidden">
         <!-- Decorative elements -->
         <div class="absolute top-20 right-0 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl"></div>
@@ -382,27 +260,8 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-12 px-6 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-700 rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-bold text-gray-900">BNGRC</div>
-                        <div class="text-xs text-gray-500">Bureau National de Gestion des Risques et Catastrophes</div>
-                    </div>
-                </div>
-                <div class="text-sm text-gray-500">
-                    © <?= date('Y') ?> BNGRC. Tous droits réservés.
-                </div>
-            </div>
-        </div>
-    </footer>
+
+<?php include __DIR__ . '/partition/footer.php'; ?>
 
     <script>
         // Mobile menu toggle
