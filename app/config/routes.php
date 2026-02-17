@@ -23,6 +23,9 @@ $router->group('', function(Router $router) use ($app) {
 	// Routes pour la récapitulation
 	$router->get('/recapitulation', [ DashboardController::class, 'recapitulation' ]);
 	$router->get('/api/stats-recapitulation', [ DashboardController::class, 'getStatsRecapitulation' ]);
+	
+	// Route pour réinitialiser les données
+	$router->post('/admin/reset', [ DashboardController::class, 'resetData' ]);
 
 	// Routes pour les dons (sans dispatch automatique)
 	$router->group('/dons', function(Router $router) {
