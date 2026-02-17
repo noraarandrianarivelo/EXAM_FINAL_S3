@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle Ville</title>
-    <!-- Bootstrap Local CSS -->
-    <link href="<?= Flight::get('flight.base_url') ?>assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        .form-control, .form-select {
-            border-radius: 0.75rem !important;
-            border: 1px solid #e2e8f0 !important;
-            background-color: #f8fafc !important;
-            padding: 0.75rem 1rem !important;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #14b8a6 !important;
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2) !important;
-            background-color: #fff !important;
-        }
-    </style>
-</head>
-
-<body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
+<?php include dirname(__DIR__) . '/partition/header.php'; ?>
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 h-20" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226, 232, 240, 0.5);">
@@ -106,5 +78,6 @@
 
     <!-- Bootstrap Local JS -->
     <script src="<?= Flight::get('flight.base_url') ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php include dirname(__DIR__) . '/partition/footer.php'; ?>
 </body>
 </html>

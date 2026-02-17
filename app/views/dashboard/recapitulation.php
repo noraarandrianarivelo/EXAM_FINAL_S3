@@ -1,75 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNGRC - Récapitulation des Besoins</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        ::selection {
-            background: #0d9488;
-            color: white;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .animate-spin {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes pulse-scale {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .pulse-update {
-            animation: pulse-scale 0.5s ease-in-out;
-        }
+<?php include dirname(__DIR__) . '/partition/header.php'; ?>
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
-    <!-- Navigation -->
-    <nav class="glass-card sticky top-0 z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="<?= Flight::get('flight.base_url') ?>" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                </div>
-                <span class="text-xl font-bold text-gray-900">BNGRC</span>
-            </a>
-            <div class="flex items-center gap-4">
-                <a href="<?= Flight::get('flight.base_url') ?>" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">
-                    Tableau de bord
-                </a>
-                <a href="<?= Flight::get('flight.base_url') ?>test/dispatch" class="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors">
-                    Dispatch
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Header Section -->
-    <section class="pt-12 pb-8 px-6">
+    <section class="pt-4 pb-8 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                 <div>
@@ -319,5 +252,6 @@
         // Auto-actualisation toutes les 30 secondes (optionnel)
         // setInterval(actualiserStats, 30000);
     </script>
+    <?php include dirname(__DIR__) . '/partition/footer.php'; ?>
 </body>
 </html>
