@@ -179,7 +179,7 @@ class DonModel
     public function getDonsDisponibles($id_categorie_besoin = null)
     {
         $DBH = $this->db;
-        
+
         $sql = 'SELECT d.*, 
                 cb.nom as nom_categorie,
                 (d.quantite - COALESCE(SUM(a.quantite_dispatch), 0)) as quantite_disponible
@@ -187,11 +187,11 @@ class DonModel
                 INNER JOIN bngrc_categorie_besoin cb ON d.id_categorie_besoin = cb.id
                 LEFT JOIN bngrc_attribution a ON d.id = a.id_don
                 WHERE 1=1';
-        
+
         if ($id_categorie_besoin !== null) {
             $sql .= ' AND d.id_categorie_besoin = ?';
         }
-        
+
         $sql .= ' GROUP BY d.id, d.quantite, d.id_categorie_besoin, d.date_saisie, d.created_at, cb.nom
                   HAVING quantite_disponible > 0
                   ORDER BY d.date_saisie';
@@ -202,7 +202,7 @@ class DonModel
         } else {
             $STH = $DBH->query($sql);
         }
-        
+
         $STH->setFetchMode(PDO::FETCH_ASSOC);
 
         $resultats = [];
@@ -211,5 +211,44 @@ class DonModel
         }
 
         return $resultats;
+    }
+
+    public function deleteAll()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('DELETE FROM bngrc_don');
+
+        try {
+            $STH->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de la réinitialisation des dons : " . $e->getMessage());
+        }
+    }
+
+    public function initialiserDons()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('INSERT INTO bngrc_don (quantite, id_categorie_besoin, date_saisie) VALUES (?, ?, ?)');
+
+        $dons = [];
+
+        try {
+            foreach ($dons as $don) {
+                $STH->execute([
+                    $don['quantite'],
+                    $don['id_categorie_besoin'],
+                    $don['date_saisie']
+                ]);
+            }
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de l'initialisation des dons : " . $e->getMessage());
+        }
+    }
+
+    public function reset(){
+        $this->deleteAll();
+        $this->initialiserDons();
     }
 }
