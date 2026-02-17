@@ -245,4 +245,45 @@ class BesoinModel
 
         return $resultats;
     }
+
+    public function deleteAll()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('DELETE FROM bngrc_besoin');
+
+        try {
+            $STH->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de la réinitialisation des besoins : " . $e->getMessage());
+        }
+    }
+
+    public function initialiserBesoins()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('INSERT INTO bngrc_besoin (quantite, id_categorie_besoin, id_ville, date_besoin) VALUES (?, ?, ?, ?)');
+
+        $besoins_initiaux = [
+            [100, 1, 1, '2024-07-01'],
+            [50, 2, 2, '2024-07-05'],
+            [200, 3, 3, '2024-07-10'],
+            [150, 4, 4, '2024-07-15'],
+            [80, 5, 5, '2024-07-20']
+        ];
+
+        try {
+            foreach ($besoins_initiaux as $besoin) {
+                $STH->execute($besoin);
+            }
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de l'initialisation des besoins : " . $e->getMessage());
+        }
+    }
+
+    public function reset(){
+        $this->deleteAll();
+        $this->initialiserBesoins();
+    }
 }
