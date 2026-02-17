@@ -242,7 +242,7 @@ class AttributionModel
         }
     }
 
-    public function deletteAll()
+    public function deleteAll()
     {
         $DBH = $this->db;
         $STH = $DBH->prepare('DELETE FROM bngrc_attribution');
