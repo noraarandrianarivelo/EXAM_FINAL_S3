@@ -245,4 +245,74 @@ class BesoinModel
 
         return $resultats;
     }
+
+    public function deleteAll()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('DELETE FROM bngrc_besoin');
+
+        try {
+            $STH->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de la réinitialisation des besoins : " . $e->getMessage());
+        }
+    }
+
+    public function initialiserBesoins()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('INSERT INTO bngrc_besoin (quantite, id_categorie_besoin, id_ville, date_besoin) VALUES (?, ?, ?, ?)');
+
+        $besoins_initiaux = [
+            // Antananarivo - après cyclone
+            [500, 1, 1, '2026-01-15 10:00:00'],
+            [200, 2, 1, '2026-01-15 10:30:00'],
+            [300, 6, 1, '2026-01-15 11:00:00'],
+            [100, 10, 1, '2026-01-15 11:30:00'],
+            // Antsirabe - inondation
+            [800, 1, 4, '2026-01-20 09:00:00'],
+            [300, 2, 4, '2026-01-20 09:30:00'],
+            [500, 4, 4, '2026-01-20 10:00:00'],
+            [50, 11, 4, '2026-01-20 10:30:00'],
+            // Mahajanga - cyclone
+            [1000, 1, 9, '2026-02-01 08:00:00'],
+            [500, 6, 9, '2026-02-01 08:30:00'],
+            [1000, 7, 9, '2026-02-01 09:00:00'],
+            [200, 9, 9, '2026-02-01 09:30:00'],
+            // Toliara - sécheresse
+            [1200, 1, 13, '2026-02-05 07:00:00'],
+            [2000, 4, 13, '2026-02-05 07:30:00'],
+            [600, 5, 13, '2026-02-05 08:00:00'],
+            [80, 11, 13, '2026-02-05 08:30:00'],
+            // Antsohihy - cyclone
+            [600, 1, 11, '2026-02-10 10:00:00'],
+            [250, 2, 11, '2026-02-10 10:30:00'],
+            [400, 6, 11, '2026-02-10 11:00:00'],
+            [150, 8, 11, '2026-02-10 11:30:00'],
+            // Miarinarivo - inondation
+            [400, 1, 7, '2026-02-12 09:00:00'],
+            [800, 4, 7, '2026-02-12 09:30:00'],
+            [80, 10, 7, '2026-02-12 10:00:00'],
+            // Ambatolampy - glissement de terrain
+            [300, 1, 6, '2026-02-14 08:00:00'],
+            [200, 6, 6, '2026-02-14 08:30:00'],
+            [100, 9, 6, '2026-02-14 09:00:00'],
+            [60, 11, 6, '2026-02-14 09:30:00']
+        ];
+
+        try {
+            foreach ($besoins_initiaux as $besoin) {
+                $STH->execute($besoin);
+            }
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de l'initialisation des besoins : " . $e->getMessage());
+        }
+    }
+
+    public function reset(){
+        $this->deleteAll();
+        $this->initialiserBesoins();
+    }
 }

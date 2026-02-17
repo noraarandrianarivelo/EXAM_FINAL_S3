@@ -1,4 +1,62 @@
 <?php include dirname(__DIR__) . '/partition/header.php'; ?>
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNGRC - Récapitulation des Besoins</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        ::selection {
+            background: #0d9488;
+            color: white;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse-update {
+            animation: pulse-scale 0.5s ease-in-out;
+        }
+        @keyframes scale-in {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-scale-in {
+            animation: scale-in 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-100 min-h-screen">
@@ -19,12 +77,18 @@
                         Suivi en temps réel des besoins totaux et satisfaits en montant
                     </p>
                 </div>
-                <div class="mt-6 md:mt-0">
+                <div class="mt-6 md:mt-0 flex gap-3">
                     <button onclick="actualiserStats()" id="btn-actualiser" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:-translate-y-0.5 transition-all duration-300">
                         <svg id="icon-refresh" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
                         <span id="btn-text">Actualiser</span>
+                    </button>
+                    <button onclick="showResetModal()" id="btn-reset" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>Réinitialiser</span>
                     </button>
                 </div>
             </div>
@@ -253,5 +317,77 @@
         // setInterval(actualiserStats, 30000);
     </script>
     <?php include dirname(__DIR__) . '/partition/footer.php'; ?>
+    <!-- Modal de confirmation de réinitialisation -->
+    <div id="resetModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in">
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-red-100 to-red-200 rounded-full">
+                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-2">Réinitialiser les données</h3>
+            <p class="text-gray-600 text-center mb-6">Êtes-vous sûr de vouloir réinitialiser <strong>tous les besoins, dons et attributions</strong> aux données initiales ? Cette action est <strong>irréversible</strong>.</p>
+            
+            <div class="flex gap-3">
+                <button onclick="hideResetModal()" class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-colors">
+                    Annuler
+                </button>
+                <button onclick="confirmReset()" id="btn-confirm-reset" class="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-red-500/50 transition-all">
+                    Confirmer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showResetModal() {
+            document.getElementById('resetModal').classList.remove('hidden');
+        }
+        
+        function hideResetModal() {
+            document.getElementById('resetModal').classList.add('hidden');
+        }
+        
+        async function confirmReset() {
+            const btnConfirm = document.getElementById('btn-confirm-reset');
+            btnConfirm.disabled = true;
+            btnConfirm.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+            
+            try {
+                const response = await fetch('<?= Flight::get('flight.base_url') ?>admin/reset', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    hideResetModal();
+                    // Afficher notification de succès
+                    alert('✅ Données réinitialisées avec succès!');
+                    // Recharger la page pour afficher les nouvelles données
+                    window.location.reload();
+                } else {
+                    alert('❌ Erreur : ' + (result.message || 'Une erreur est survenue'));
+                    btnConfirm.disabled = false;
+                    btnConfirm.innerHTML = 'Confirmer';
+                }
+            } catch (error) {
+                alert('❌ Erreur de connexion : ' + error.message);
+                btnConfirm.disabled = false;
+                btnConfirm.innerHTML = 'Confirmer';
+            }
+        }
+        
+        // Fermer le modal en cliquant en dehors
+        document.getElementById('resetModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideResetModal();
+            }
+        });
+    </script>
+
 </body>
 </html>
