@@ -40,6 +40,8 @@ $router->group('', function (Router $router) use ($app) {
 		$router->get('/dispatch/don/@id:[0-9]+', [TestController::class, 'showDon']);
 		$router->get('/dispatch/don/@id:[0-9]+/simuler', [TestController::class, 'simuler']);
 		$router->post('/dispatch/don/@id:[0-9]+', [TestController::class, 'dispatch']);
+		$router->get('/dispatch/don/@id:[0-9]+/simuler-proportionnel', [TestController::class, 'simulerProportionnel']);
+		$router->post('/dispatch/don/@id:[0-9]+/proportionnel', [TestController::class, 'dispatchProportionnel']);
 
 		// Routes pour dispatch GÉNÉRAL (tous les dons)
 		$router->get('/dispatch/simuler-tout', [ TestController::class, 'simulerTout' ]);

@@ -10,6 +10,86 @@ use PDOException;
 
 class AttributionService
 {
+    /**
+     * Dispatch proportionnel d'un don selon la règle du Todo
+     * Le reliquat va à ceux qui ont le plus grand reste décimal
+     */
+    public function dispatcherProportionnel($idDon)
+    {
+        // Récupérer le don
+        $don = $this->donModel->getById($idDon);
+        if (!$don) return false;
+
+        // Quantité restante à dispatcher
+        $attributions = $this->attributionModel->getByDon($idDon);
+        $utilise = 0;
+        foreach ($attributions as $attr) {
+            $utilise += $attr['quantite_dispatch'];
+        }
+        $resteDon = $don['quantite'] - $utilise;
+        if ($resteDon <= 0) return false;
+
+        // Récupérer les besoins ouverts pour la catégorie du don
+        $besoins = $this->besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+        if (empty($besoins)) return false;
+
+        // Calculer le total des besoins restants
+        $totalBesoin = 0;
+        foreach ($besoins as $besoin) {
+            $totalBesoin += $besoin['reste'];
+        }
+        if ($totalBesoin == 0) return false;
+
+        // Calculer la part proportionnelle et le reliquat décimal
+        $dispatches = [];
+        $resteTotal = $resteDon;
+        foreach ($besoins as $besoin) {
+            $partExacte = ($besoin['reste'] / $totalBesoin) * $resteDon;
+            $entier = (int)floor($partExacte);
+            $decimal = $partExacte - $entier;
+            $dispatches[] = [
+                'besoin' => $besoin,
+                'part' => $partExacte,
+                'entier' => $entier,
+                'decimal' => $decimal
+            ];
+            $resteTotal -= $entier;
+        }
+
+        // Trier TOUS les dispatches par décimal décroissant
+        usort($dispatches, function($a, $b) {
+            return $b['decimal'] <=> $a['decimal'];
+        });
+
+        // Distribuer le reliquat aux besoins avec le plus grand décimal (sans dépasser leur besoin restant)
+        foreach ($dispatches as &$d) {
+            if ($resteTotal <= 0) break;
+            // On ajoute du reliquat seulement si on ne dépasse pas le besoin restant
+            if (($d['entier'] + 1) <= $d['besoin']['reste']) {
+                $d['entier'] += 1;
+                $resteTotal--;
+            }
+        }
+        unset($d);
+
+        // Créer les attributions sans jamais dépasser le besoin restant
+        foreach ($dispatches as $d) {
+            $qte = min($d['entier'], $d['besoin']['reste']);
+            if ($qte > 0) {
+                $attribution = new AttributionModel($this->db);
+                $attribution->setIdBesoin($d['besoin']['id']);
+                $attribution->setIdDon($idDon);
+                $attribution->setQuantiteDispatch($qte);
+                $attribution->setDateDispatch(date('Y-m-d H:i:s'));
+                try {
+                    $attribution->save();
+                } catch (PDOException $e) {
+                    error_log("Erreur lors du dispatch proportionnel : " . $e->getMessage());
+                }
+            }
+        }
+        return true;
+    }
 
     private $db;
     private DonModel $donModel;
@@ -23,7 +103,6 @@ class AttributionService
         $this->attributionModel = new AttributionModel($db);
         $this->besoinModel = new BesoinModel($db);
     }
-
 
     public function dispatcherNouvelleArrivage($idDon)
     {

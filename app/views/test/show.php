@@ -190,22 +190,41 @@
             <!-- Dispatch Buttons -->
             <?php if ($reste > 0 && !empty($besoins)): ?>
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-                    <!-- Bouton Simuler -->
+                    <!-- Bouton Simuler FIFO -->
                     <a href="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>/simuler" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                         </svg>
-                        Simuler le dispatch
+                        Simuler FIFO
                     </a>
-                    
-                    <!-- Bouton Valider -->
+
+                    <!-- Bouton Valider FIFO -->
                     <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>">
-                        <button type="submit" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300" onclick="return confirm('Êtes-vous sûr de vouloir valider le dispatch ? Cette action est définitive.');">
+                        <button type="submit" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300" onclick="return confirm('Êtes-vous sûr de vouloir valider le dispatch FIFO ? Cette action est définitive.');">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            Valider le dispatch
+                            Valider FIFO
+                        </button>
+                    </form>
+
+                    <!-- Bouton Simuler Proportionnel -->
+                    <a href="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>/simuler-proportionnel" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:-translate-y-0.5 transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Simuler Proportionnel
+                    </a>
+
+                    <!-- Bouton Dispatch Proportionnel -->
+                    <form method="POST" action="<?= Flight::get('flight.base_url') ?>test/dispatch/don/<?= $don['id'] ?>/proportionnel">
+                        <button type="submit" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pink-700 to-pink-800 text-white font-bold text-lg rounded-xl shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:-translate-y-0.5 transition-all duration-300" onclick="return confirm('Êtes-vous sûr de vouloir valider le dispatch proportionnel ? Cette action est définitive.');">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Valider Proportionnel
                         </button>
                     </form>
                 </div>

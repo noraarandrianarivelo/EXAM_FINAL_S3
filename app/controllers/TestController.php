@@ -10,6 +10,155 @@ use app\services\AttributionService;
 
 class TestController
 {
+    /**
+     * Simule le dispatch proportionnel sans enregistrer
+     */
+    public function simulerProportionnel($id)
+    {
+        $db = $this->app->db();
+        $donModel = new DonModel($db);
+        $besoinModel = new BesoinModel($db);
+        $attributionModel = new AttributionModel($db);
+
+        $don = $donModel->getById($id);
+        if (!$don) {
+            $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
+            return;
+        }
+
+        // État AVANT
+        $attributionsAvant = $attributionModel->getByDon($id);
+        $utiliseAvant = 0;
+        foreach ($attributionsAvant as $attr) {
+            $utiliseAvant += $attr['quantite_dispatch'];
+        }
+        $resteAvant = $don['quantite'] - $utiliseAvant;
+        $besoinsAvant = $besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+
+        // SIMULATION du dispatch proportionnel
+        // Calcul sans enregistrement
+        $totalBesoin = 0;
+        foreach ($besoinsAvant as $b) {
+            $totalBesoin += $b['reste'];
+        }
+        
+        $simulated = [];
+        if ($totalBesoin > 0 && $resteAvant > 0) {
+            foreach ($besoinsAvant as $b) {
+                $partExacte = ($b['reste'] / $totalBesoin) * $resteAvant;
+                $entier = (int)floor($partExacte);
+                $decimal = $partExacte - $entier;
+                $simulated[] = [
+                    'besoin' => $b,
+                    'part' => $partExacte,
+                    'entier' => $entier,
+                    'decimal' => $decimal
+                ];
+            }
+            
+            // Trier par décimal décroissant et distribuer reliquat
+            usort($simulated, function($a, $b) {
+                return $b['decimal'] <=> $a['decimal'];
+            });
+            
+            $resteTotal = $resteAvant;
+            foreach ($simulated as &$s) {
+                $resteTotal -= $s['entier'];
+            }
+            
+            foreach ($simulated as &$s) {
+                if ($resteTotal <= 0) break;
+                if (($s['entier'] + 1) <= $s['besoin']['reste']) {
+                    $s['entier'] += 1;
+                    $resteTotal--;
+                }
+            }
+        }
+
+        $this->app->render('test/simulation-proportionnelle', [
+            'don' => $don,
+            'avant' => [
+                'utilise' => $utiliseAvant,
+                'reste' => $resteAvant,
+                'besoins' => $besoinsAvant,
+                'attributions' => $attributionsAvant
+            ],
+            'simulated' => $simulated
+        ]);
+    }
+
+    /**
+     * Dispatch proportionnel d'un don unique (exécution réelle)
+     */
+    public function dispatchProportionnel($id)
+    {
+        $db = $this->app->db();
+        $donModel = new DonModel($db);
+        $besoinModel = new BesoinModel($db);
+        $attributionModel = new AttributionModel($db);
+
+        $don = $donModel->getById($id);
+        if (!$don) {
+            $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
+            return;
+        }
+
+        // État AVANT
+        $attributionsAvant = $attributionModel->getByDon($id);
+        $utiliseAvant = 0;
+        foreach ($attributionsAvant as $attr) {
+            $utiliseAvant += $attr['quantite_dispatch'];
+        }
+        $resteAvant = $don['quantite'] - $utiliseAvant;
+        $besoinsAvant = $besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+
+        // Dispatch proportionnel
+        $attributionService = new AttributionService($db);
+        $resultat = $attributionService->dispatcherProportionnel($id);
+
+        // État APRÈS
+        $attributionsApres = $attributionModel->getByDon($id);
+        $utiliseApres = 0;
+        foreach ($attributionsApres as $attr) {
+            $utiliseApres += $attr['quantite_dispatch'];
+        }
+        $resteApres = $don['quantite'] - $utiliseApres;
+        $besoinsApres = $besoinModel->getBesoinsOuverts($don['id_categorie_besoin']);
+
+        // Nouvelles attributions créées
+        $nouvellesAttributions = [];
+        foreach ($attributionsApres as $attrApres) {
+            $isNew = true;
+            foreach ($attributionsAvant as $attrAvant) {
+                if ($attrAvant['id'] == $attrApres['id']) {
+                    $isNew = false;
+                    break;
+                }
+            }
+            if ($isNew) {
+                $nouvellesAttributions[] = $attrApres;
+            }
+        }
+
+        $this->app->render('test/result', [
+            'don' => $don,
+            'resultat' => $resultat,
+            'avant' => [
+                'utilise' => $utiliseAvant,
+                'reste' => $resteAvant,
+                'besoins' => $besoinsAvant,
+                'attributions' => $attributionsAvant
+            ],
+            'apres' => [
+                'utilise' => $utiliseApres,
+                'reste' => $resteApres,
+                'besoins' => $besoinsApres,
+                'attributions' => $attributionsApres
+            ],
+            'nouvelles' => $nouvellesAttributions
+        ]);
+    }
+
     protected Engine $app;
 
     public function __construct($app)
