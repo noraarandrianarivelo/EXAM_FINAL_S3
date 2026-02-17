@@ -241,4 +241,17 @@ class AttributionModel
             throw new PDOException("Erreur lors du calcul de la quantité attribuée : " . $e->getMessage());
         }
     }
+
+    public function deleteAll()
+    {
+        $DBH = $this->db;
+        $STH = $DBH->prepare('DELETE FROM bngrc_attribution');
+
+        try {
+            $STH->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new PDOException("Erreur lors de la réinitialisation des attributions : " . $e->getMessage());
+        }
+    }
 }
