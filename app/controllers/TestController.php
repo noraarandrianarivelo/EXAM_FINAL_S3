@@ -25,9 +25,9 @@ class TestController
         $db = $this->app->db();
         $donModel = new DonModel($db);
         $attributionModel = new AttributionModel($db);
-        
+
         $dons = $donModel->getAll();
-        
+
         // Ajouter les informations de dispatch pour chaque don
         foreach ($dons as &$don) {
             $attributions = $attributionModel->getByDon($don['id']);
@@ -54,7 +54,7 @@ class TestController
         $attributionModel = new AttributionModel($db);
 
         $don = $donModel->getById($id);
-        
+
         if (!$don) {
             $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
             return;
@@ -92,7 +92,7 @@ class TestController
         $attributionModel = new AttributionModel($db);
 
         $don = $donModel->getById($id);
-        
+
         if (!$don) {
             $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
             return;
@@ -136,7 +136,7 @@ class TestController
         $attributionModel = new AttributionModel($db);
 
         $don = $donModel->getById($id);
-        
+
         if (!$don) {
             $this->app->redirect($this->app->get('flight.base_url') . 'test/dispatch');
             return;
@@ -237,18 +237,18 @@ class TestController
     /**
      * Exécute le dispatch réel de TOUS les dons (Besoins du plus petit au plus grand)
      */
-public function dispatcherToutCroissant()
-{
-    $db = $this->app->db();
-    $attributionService = new \app\services\AttributionService($db);
+    public function dispatcherToutCroissant()
+    {
+        $db = $this->app->db();
+        $attributionService = new \app\services\AttributionService($db);
 
-    // Dispatch réel croissant
-    $resultat = $attributionService->dispatcherTousLesDonsBesoinCroissant();
+        // Dispatch réel croissant
+        $resultat = $attributionService->dispatcherTousLesDonsBesoinCroissant();
 
-    $this->app->render('test/result-tout-croissant', [
-        'resultat' => $resultat
-    ]);
-}
+        $this->app->render('test/result-tout-croissant', [
+            'resultat' => $resultat
+        ]);
+    }
 
 
     public function simulerToutCroissant()
@@ -257,6 +257,38 @@ public function dispatcherToutCroissant()
         $attributionService = new \app\services\AttributionService($db);
         $resultat = $attributionService->simulerTousLesDonsBesoinCroissant();
         $this->app->render('test/simulation-tout-croissant', [
+            'resultat' => $resultat
+        ]);
+    }
+
+    /**
+     * Simule le dispatch proportionnel pour TOUS les dons
+     */
+    public function simulerToutProportionnel()
+    {
+        $db = $this->app->db();
+        $attributionService = new \app\services\AttributionService($db);
+
+        // Simuler tous les dons proportionnellement
+        $resultat = $attributionService->simulerTousLesDonsProportionnel();
+
+        $this->app->render('test/simulation-general-proportionnel', [
+            'resultat' => $resultat
+        ]);
+    }
+
+    /**
+     * Dispatch réel proportionnel pour TOUS les dons
+     */
+    public function dispatcherToutProportionnel()
+    {
+        $db = $this->app->db();
+        $attributionService = new \app\services\AttributionService($db);
+
+        // Dispatch réel proportionnel
+        $resultat = $attributionService->dispatcherTousLesDonsProportionnel();
+
+        $this->app->render('test/result-general-proportionnel', [
             'resultat' => $resultat
         ]);
     }
