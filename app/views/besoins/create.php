@@ -109,10 +109,6 @@
                                 <input type="number" class="form-control form-control-lg" id="quantite" name="quantite" placeholder="Ex: 500" required>
                             </div>
                             <div class="col-md-4">
-                                <label for="prix_unitaire" class="form-label fw-semibold text-gray-700 mb-2">Prix Unitaire (Ar)</label>
-                                <input type="number" step="0.01" class="form-control form-control-lg" id="prix_unitaire" name="prix_unitaire" placeholder="Ex: 2500.00" required>
-                            </div>
-                            <div class="col-md-4">
                                 <label for="date_ajout" class="form-label fw-semibold text-gray-700 mb-2">Date d'ajout</label>
                                 <input type="date" class="form-control form-control-lg" id="date_ajout" name="date_ajout" value="<?= date('Y-m-d') ?>" required>
                             </div>

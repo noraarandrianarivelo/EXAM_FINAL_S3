@@ -59,10 +59,9 @@ class BesoinController
         $id_ville = $_POST['ville'] ?? null;
         $id_categorie_besoin = $_POST['categorie_besoin'] ?? null;
         $quantite = $_POST['quantite'] ?? 0;
-        $pu = $_POST['prix_unitaire'] ?? 0;
         $date_besoin = $_POST['date_ajout'] ?? date('Y-m-d');
 
-        if (!$id_ville || !$id_categorie_besoin || !$quantite || !$pu) {
+        if (!$id_ville || !$id_categorie_besoin || !$quantite ) {
             $this->app->redirect($this->app->get('flight.base_url') . 'besoins/create?error=missing');
             return;
         }
@@ -71,7 +70,6 @@ class BesoinController
         $besoinModel->setIdVille($id_ville);
         $besoinModel->setIdCategorieBesoin($id_categorie_besoin);
         $besoinModel->setQuantite($quantite);
-        $besoinModel->setPu($pu);
         $besoinModel->setDateBesoin($date_besoin);
 
         try {
@@ -125,7 +123,6 @@ class BesoinController
         $besoinModel->setIdVille($_POST['ville'] ?? null);
         $besoinModel->setIdCategorieBesoin($_POST['categorie_besoin'] ?? null);
         $besoinModel->setQuantite($_POST['quantite'] ?? 0);
-        $besoinModel->setPu($_POST['prix_unitaire'] ?? 0);
         $besoinModel->setDateBesoin($_POST['date_ajout'] ?? date('Y-m-d'));
 
         try {
